@@ -1,5 +1,5 @@
-/*
-  wchar_t версии старых файловых функций...
+п»ї/*
+  wchar_t РІРµСЂСЃРёРё СЃС‚Р°СЂС‹С… С„Р°Р№Р»РѕРІС‹С… С„СѓРЅРєС†РёР№...
 */
 
 #pragma once
@@ -11,38 +11,38 @@ int  get_file_length(const wchar_t *file); // if error return 0!
 int  read_bin(const wchar_t *file, void *buffer, int maxbuflen);
 bool read_bin_ex(const wchar_t *file, void *buffer, int &maxbuflen);
 
-// читает кусок файла по текущему смещению, возврящает число прочитанных байт
+// С‡РёС‚Р°РµС‚ РєСѓСЃРѕРє С„Р°Р№Р»Р° РїРѕ С‚РµРєСѓС‰РµРјСѓ СЃРјРµС‰РµРЅРёСЋ, РІРѕР·РІСЂСЏС‰Р°РµС‚ С‡РёСЃР»Рѕ РїСЂРѕС‡РёС‚Р°РЅРЅС‹С… Р±Р°Р№С‚
 int  read_bin_offset(const wchar_t *file, void *buffer, int maxbuflen, int offset);
 
-// если create=1 - создает и пишет в файл, иначе файл уже должен существовать!
+// РµСЃР»Рё create=1 - СЃРѕР·РґР°РµС‚ Рё РїРёС€РµС‚ РІ С„Р°Р№Р», РёРЅР°С‡Рµ С„Р°Р№Р» СѓР¶Рµ РґРѕР»Р¶РµРЅ СЃСѓС‰РµСЃС‚РІРѕРІР°С‚СЊ!
 bool write_bin(const wchar_t *file, const void *buffer, int buflen, bool create);
 
-// создает файл с нуля, а если он есть - записывает в файл методом добавления к концу
+// СЃРѕР·РґР°РµС‚ С„Р°Р№Р» СЃ РЅСѓР»СЏ, Р° РµСЃР»Рё РѕРЅ РµСЃС‚СЊ - Р·Р°РїРёСЃС‹РІР°РµС‚ РІ С„Р°Р№Р» РјРµС‚РѕРґРѕРј РґРѕР±Р°РІР»РµРЅРёСЏ Рє РєРѕРЅС†Сѓ
 bool write_bin_append(const wchar_t *file, const void *buffer, int buflen);
-// это write_bin_append() с разрешением коллективного доступа к файлу на чтение/запись
+// СЌС‚Рѕ write_bin_append() СЃ СЂР°Р·СЂРµС€РµРЅРёРµРј РєРѕР»Р»РµРєС‚РёРІРЅРѕРіРѕ РґРѕСЃС‚СѓРїР° Рє С„Р°Р№Р»Сѓ РЅР° С‡С‚РµРЅРёРµ/Р·Р°РїРёСЃСЊ
 bool write_bin_append2(const wchar_t *file, const void *buffer, int buflen);
 
-// записывает кусок файла по текущему смещению из буфера, файл должен существовать!
-// может писать в любую часть файла, в т.ч. с увеличением его первонач-го размера,
-// пропущенные при этом куски заполняются нулями (если смещение больше длины файла)
+// Р·Р°РїРёСЃС‹РІР°РµС‚ РєСѓСЃРѕРє С„Р°Р№Р»Р° РїРѕ С‚РµРєСѓС‰РµРјСѓ СЃРјРµС‰РµРЅРёСЋ РёР· Р±СѓС„РµСЂР°, С„Р°Р№Р» РґРѕР»Р¶РµРЅ СЃСѓС‰РµСЃС‚РІРѕРІР°С‚СЊ!
+// РјРѕР¶РµС‚ РїРёСЃР°С‚СЊ РІ Р»СЋР±СѓСЋ С‡Р°СЃС‚СЊ С„Р°Р№Р»Р°, РІ С‚.С‡. СЃ СѓРІРµР»РёС‡РµРЅРёРµРј РµРіРѕ РїРµСЂРІРѕРЅР°С‡-РіРѕ СЂР°Р·РјРµСЂР°,
+// РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ РїСЂРё СЌС‚РѕРј РєСѓСЃРєРё Р·Р°РїРѕР»РЅСЏСЋС‚СЃСЏ РЅСѓР»СЏРјРё (РµСЃР»Рё СЃРјРµС‰РµРЅРёРµ Р±РѕР»СЊС€Рµ РґР»РёРЅС‹ С„Р°Р№Р»Р°)
 bool write_bin_offset(const wchar_t *file, const void *buffer, int buflen, int offset);
 
 // ==========================================================================
 
-class FILEopen // простой "открыватель" файла с самозакрытием
+class FILEopen // РїСЂРѕСЃС‚РѕР№ "РѕС‚РєСЂС‹РІР°С‚РµР»СЊ" С„Р°Р№Р»Р° СЃ СЃР°РјРѕР·Р°РєСЂС‹С‚РёРµРј
 {
   FILE *pfile;
 public:
   FILEopen(const wstring2 filename, const wstring2 mode) { _wfopen_s(&pfile, filename, mode); }
-  // деструктор закрывает файл, это можно сделать и до уничтожения объекта: (*this).~FILEopen();
+  // РґРµСЃС‚СЂСѓРєС‚РѕСЂ Р·Р°РєСЂС‹РІР°РµС‚ С„Р°Р№Р», СЌС‚Рѕ РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ Рё РґРѕ СѓРЅРёС‡С‚РѕР¶РµРЅРёСЏ РѕР±СЉРµРєС‚Р°: (*this).~FILEopen();
   ~FILEopen() { if (pfile) fclose( pfile ); pfile = NULL; }
-  operator FILE*() { return pfile; }  // доступ к *pfile  при помощи (FILE*)(*this)
-  FILE *operator->() { return pfile; } // доступ к pfile-> при помощи (*this)->
-  // файл открыт без ошибок, если (*this != 0) или ( this->openok() == true )
+  operator FILE*() { return pfile; }  // РґРѕСЃС‚СѓРї Рє *pfile  РїСЂРё РїРѕРјРѕС‰Рё (FILE*)(*this)
+  FILE *operator->() { return pfile; } // РґРѕСЃС‚СѓРї Рє pfile-> РїСЂРё РїРѕРјРѕС‰Рё (*this)->
+  // С„Р°Р№Р» РѕС‚РєСЂС‹С‚ Р±РµР· РѕС€РёР±РѕРє, РµСЃР»Рё (*this != 0) РёР»Рё ( this->openok() == true )
   bool openok() { return pfile != NULL; }
 };
 
-class FILEopen2 // FILEopen с расшариванием доступа к файлу
+class FILEopen2 // FILEopen СЃ СЂР°СЃС€Р°СЂРёРІР°РЅРёРµРј РґРѕСЃС‚СѓРїР° Рє С„Р°Р№Р»Сѓ
 {
   FILE *pfile;
 public:
@@ -55,52 +55,52 @@ _SH_DENYRW Denies read and write access to the file.
 _SH_DENYWR Denies write access to the file.
 */
   FILEopen2(const wstring2 filename, const wstring2 mode, int shflag) { pfile = _wfsopen(filename, mode, shflag); }
-  // деструктор закрывает файл, это можно сделать и до уничтожения объекта: (*this).~FILEopen();
+  // РґРµСЃС‚СЂСѓРєС‚РѕСЂ Р·Р°РєСЂС‹РІР°РµС‚ С„Р°Р№Р», СЌС‚Рѕ РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ Рё РґРѕ СѓРЅРёС‡С‚РѕР¶РµРЅРёСЏ РѕР±СЉРµРєС‚Р°: (*this).~FILEopen();
   ~FILEopen2() { if (pfile) fclose( pfile ); pfile = NULL; }
-  operator FILE*() { return pfile; }  // доступ к *pfile  при помощи (FILE*)(*this)
-  FILE *operator->() { return pfile; } // доступ к pfile-> при помощи (*this)->
-  // файл открыт без ошибок, если (*this != 0) или ( this->openok() == true )
+  operator FILE*() { return pfile; }  // РґРѕСЃС‚СѓРї Рє *pfile  РїСЂРё РїРѕРјРѕС‰Рё (FILE*)(*this)
+  FILE *operator->() { return pfile; } // РґРѕСЃС‚СѓРї Рє pfile-> РїСЂРё РїРѕРјРѕС‰Рё (*this)->
+  // С„Р°Р№Р» РѕС‚РєСЂС‹С‚ Р±РµР· РѕС€РёР±РѕРє, РµСЃР»Рё (*this != 0) РёР»Рё ( this->openok() == true )
   bool openok() { return pfile != NULL; }
 };
 
 // ==========================================================================
 
-class MFile // метафайл - файл на диске или его образ в RAM (созданный вовне)
+class MFile // РјРµС‚Р°С„Р°Р№Р» - С„Р°Р№Р» РЅР° РґРёСЃРєРµ РёР»Рё РµРіРѕ РѕР±СЂР°Р· РІ RAM (СЃРѕР·РґР°РЅРЅС‹Р№ РІРѕРІРЅРµ)
 {
-  bool disk_file; // true если файл на диске, иначе файл в RAM
-  FILE *file; // файловый указатель
-  uint8 *memory; // начало образа файла в RAM
-  int memlength; // количество байт в RAM образе
-  int memoffset; // номер текущего байта RAM от начала memory
-  int mem_eof; // !0 после первой попытки прочесть за концом memory, иначе 0
+  bool disk_file; // true РµСЃР»Рё С„Р°Р№Р» РЅР° РґРёСЃРєРµ, РёРЅР°С‡Рµ С„Р°Р№Р» РІ RAM
+  FILE *file; // С„Р°Р№Р»РѕРІС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ
+  uint8 *memory; // РЅР°С‡Р°Р»Рѕ РѕР±СЂР°Р·Р° С„Р°Р№Р»Р° РІ RAM
+  int memlength; // РєРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚ РІ RAM РѕР±СЂР°Р·Рµ
+  int memoffset; // РЅРѕРјРµСЂ С‚РµРєСѓС‰РµРіРѕ Р±Р°Р№С‚Р° RAM РѕС‚ РЅР°С‡Р°Р»Р° memory
+  int mem_eof; // !0 РїРѕСЃР»Рµ РїРµСЂРІРѕР№ РїРѕРїС‹С‚РєРё РїСЂРѕС‡РµСЃС‚СЊ Р·Р° РєРѕРЅС†РѕРј memory, РёРЅР°С‡Рµ 0
 
 public:
-  MFile(FILE *dfile); // конструктор объекта для настоящего дискового файла
-  MFile(uint8 *ramemory, int ramemlength); // то же, для образа файла из RAM
+  MFile(FILE *dfile); // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РѕР±СЉРµРєС‚Р° РґР»СЏ РЅР°СЃС‚РѕСЏС‰РµРіРѕ РґРёСЃРєРѕРІРѕРіРѕ С„Р°Р№Р»Р°
+  MFile(uint8 *ramemory, int ramemlength); // С‚Рѕ Р¶Рµ, РґР»СЏ РѕР±СЂР°Р·Р° С„Р°Р№Р»Р° РёР· RAM
 
-  // функции чтения 1, 2 или 4-х байт из метафайла
+  // С„СѓРЅРєС†РёРё С‡С‚РµРЅРёСЏ 1, 2 РёР»Рё 4-С… Р±Р°Р№С‚ РёР· РјРµС‚Р°С„Р°Р№Р»Р°
   uint8   read_uint8();
   uint32 read_uint16();
   uint32 read_uint32();
 
-  int eof(); // макрос feof()
-  int seek(int offset, int origin); // функция fseek()
+  int eof(); // РјР°РєСЂРѕСЃ feof()
+  int seek(int offset, int origin); // С„СѓРЅРєС†РёСЏ fseek()
 };
 
 // ==========================================================================
 
-// читаем файл с диска прямо в конструкторе, выдаем содержимое и его размеры
+// С‡РёС‚Р°РµРј С„Р°Р№Р» СЃ РґРёСЃРєР° РїСЂСЏРјРѕ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ, РІС‹РґР°РµРј СЃРѕРґРµСЂР¶РёРјРѕРµ Рё РµРіРѕ СЂР°Р·РјРµСЂС‹
 class BinFile
 {
-  Ar <uint8> buf; // массив байт - содержимое файла с диска
-  int len; // длина файла - надо, т.к. размер массива Ar другой!
-  wstring2 file; // имя файла из конструктора
-  BinFile &operator=(const BinFile &) {}; // избавляемся от warning C4512: assignment operator could not be generated
+  Ar <uint8> buf; // РјР°СЃСЃРёРІ Р±Р°Р№С‚ - СЃРѕРґРµСЂР¶РёРјРѕРµ С„Р°Р№Р»Р° СЃ РґРёСЃРєР°
+  int len; // РґР»РёРЅР° С„Р°Р№Р»Р° - РЅР°РґРѕ, С‚.Рє. СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР° Ar РґСЂСѓРіРѕР№!
+  wstring2 file; // РёРјСЏ С„Р°Р№Р»Р° РёР· РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
+  BinFile &operator=(const BinFile &) {}; // РёР·Р±Р°РІР»СЏРµРјСЃСЏ РѕС‚ warning C4512: assignment operator could not be generated
 
 public:
-  const int &length; // количество файловых байт в контенте
+  const int &length; // РєРѕР»РёС‡РµСЃС‚РІРѕ С„Р°Р№Р»РѕРІС‹С… Р±Р°Р№С‚ РІ РєРѕРЅС‚РµРЅС‚Рµ
   uint8 *content() const { return (len==0)? 0:buf.memory(); }
-  // описание параметров перекодировки см. TurnSecureCode()
+  // РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ РїРµСЂРµРєРѕРґРёСЂРѕРІРєРё СЃРј. TurnSecureCode()
   BinFile(wstring2 filename, bool secure = false, int key = 0, int width = 32, bool key_from_numbytes = false)
          : length(len)
   {
@@ -108,41 +108,41 @@ public:
     len = get_file_length(file);
     if (len <= 0) { len = 0; return; }
  
-    // оставляем в конце буфера 2 нулевых байта - для нужд текстовых файлов!
+    // РѕСЃС‚Р°РІР»СЏРµРј РІ РєРѕРЅС†Рµ Р±СѓС„РµСЂР° 2 РЅСѓР»РµРІС‹С… Р±Р°Р№С‚Р° - РґР»СЏ РЅСѓР¶Рґ С‚РµРєСЃС‚РѕРІС‹С… С„Р°Р№Р»РѕРІ!
     buf.renew(len+2);
     read_bin(file, buf.memory(), len);
     buf[len] = buf[len+1] = 0;
 
-    // перекодируем прочитанные данные если надо
+    // РїРµСЂРµРєРѕРґРёСЂСѓРµРј РїСЂРѕС‡РёС‚Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ РµСЃР»Рё РЅР°РґРѕ
     if ( secure ) turn_secure_state(key, width, key_from_numbytes);
   }
 
-  // перекодировка прочитанных из файла данных
+  // РїРµСЂРµРєРѕРґРёСЂРѕРІРєР° РїСЂРѕС‡РёС‚Р°РЅРЅС‹С… РёР· С„Р°Р№Р»Р° РґР°РЅРЅС‹С…
   bool turn_secure_state(int key = 0, int width = 32, bool key_from_numbytes = false)
   {
     return TurnSecureCode(buf.memory(), len, key, width, key_from_numbytes);
   }
 
-  // запись файла на диск - поверх исходного
+  // Р·Р°РїРёСЃСЊ С„Р°Р№Р»Р° РЅР° РґРёСЃРє - РїРѕРІРµСЂС… РёСЃС…РѕРґРЅРѕРіРѕ
   bool save() { return write_bin(file, buf.memory(), len, true); }
 };
 
 
-// текстовый файл любого типа - Unicode или ANSI - читается в широкую строку,
-// однако трансляция литер CR/LF не производится!
+// С‚РµРєСЃС‚РѕРІС‹Р№ С„Р°Р№Р» Р»СЋР±РѕРіРѕ С‚РёРїР° - Unicode РёР»Рё ANSI - С‡РёС‚Р°РµС‚СЃСЏ РІ С€РёСЂРѕРєСѓСЋ СЃС‚СЂРѕРєСѓ,
+// РѕРґРЅР°РєРѕ С‚СЂР°РЅСЃР»СЏС†РёСЏ Р»РёС‚РµСЂ CR/LF РЅРµ РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ!
 class TextFile
 {
-  wstring file; // широкая строка-копия текста из файла
-  bool uni; // true для Unicode, false для ANSI файла
-  size_t len; // длина строки
-  static const wchar_t UNI_HDR = 0xFEFF; // маркер Unicode текста в начале файла
-  TextFile &operator=(const TextFile &) {}; // избавляемся от warning C4512: assignment operator could not be generated
+  wstring file; // С€РёСЂРѕРєР°СЏ СЃС‚СЂРѕРєР°-РєРѕРїРёСЏ С‚РµРєСЃС‚Р° РёР· С„Р°Р№Р»Р°
+  bool uni; // true РґР»СЏ Unicode, false РґР»СЏ ANSI С„Р°Р№Р»Р°
+  size_t len; // РґР»РёРЅР° СЃС‚СЂРѕРєРё
+  static const wchar_t UNI_HDR = 0xFEFF; // РјР°СЂРєРµСЂ Unicode С‚РµРєСЃС‚Р° РІ РЅР°С‡Р°Р»Рµ С„Р°Р№Р»Р°
+  TextFile &operator=(const TextFile &) {}; // РёР·Р±Р°РІР»СЏРµРјСЃСЏ РѕС‚ warning C4512: assignment operator could not be generated
 
 public:
-  const size_t &length; // количество литер в контенте
-  const bool &is_unicode; // true для Unicode, false для ANSI файла
-  const wstring &content; // широкая строка-копия текста из файла
-  // описание параметров перекодировки см. TurnSecureCode()
+  const size_t &length; // РєРѕР»РёС‡РµСЃС‚РІРѕ Р»РёС‚РµСЂ РІ РєРѕРЅС‚РµРЅС‚Рµ
+  const bool &is_unicode; // true РґР»СЏ Unicode, false РґР»СЏ ANSI С„Р°Р№Р»Р°
+  const wstring &content; // С€РёСЂРѕРєР°СЏ СЃС‚СЂРѕРєР°-РєРѕРїРёСЏ С‚РµРєСЃС‚Р° РёР· С„Р°Р№Р»Р°
+  // РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ РїРµСЂРµРєРѕРґРёСЂРѕРІРєРё СЃРј. TurnSecureCode()
   TextFile(wstring2 filename, bool secure = false, int key = 0, int width = 32, bool key_from_numbytes = false)
           : is_unicode(uni), content(file), length(len)
   {
@@ -152,14 +152,14 @@ public:
     len = df.length;
     if (len <= 0) { len = 0; return; }
 
-    // проверяем тип текста - у юникодового должен быть хедер и четная длина
+    // РїСЂРѕРІРµСЂСЏРµРј С‚РёРї С‚РµРєСЃС‚Р° - Сѓ СЋРЅРёРєРѕРґРѕРІРѕРіРѕ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ С…РµРґРµСЂ Рё С‡РµС‚РЅР°СЏ РґР»РёРЅР°
     if (len%2 == 0 && len > 2)
     {
       wchar_t *text = (wchar_t *) df.content();
       if ( text[0] == UNI_HDR )
       {
         uni = true;
-        file = &text[1]; // пропускаем хедер!
+        file = &text[1]; // РїСЂРѕРїСѓСЃРєР°РµРј С…РµРґРµСЂ!
       }
     }
 

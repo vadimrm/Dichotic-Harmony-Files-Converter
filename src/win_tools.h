@@ -1,97 +1,97 @@
-
+п»ї
 #pragma once
 
-// pip() в релизе заменять на pipex() т.к. под некоторыми XP pip() зависает!
-void pip(); // 1000 Hz/ 20 msec на спикере!
-void pip2(int freq, int time); // Hz/msec на спикере!
-void pipex(); // сигнал на звук. карточку!
+// pip() РІ СЂРµР»РёР·Рµ Р·Р°РјРµРЅСЏС‚СЊ РЅР° pipex() С‚.Рє. РїРѕРґ РЅРµРєРѕС‚РѕСЂС‹РјРё XP pip() Р·Р°РІРёСЃР°РµС‚!
+void pip(); // 1000 Hz/ 20 msec РЅР° СЃРїРёРєРµСЂРµ!
+void pip2(int freq, int time); // Hz/msec РЅР° СЃРїРёРєРµСЂРµ!
+void pipex(); // СЃРёРіРЅР°Р» РЅР° Р·РІСѓРє. РєР°СЂС‚РѕС‡РєСѓ!
 
 inline int wstr2int(wstring2 &wstr) { return _wtol(wstr); }
 int EatMessages(HWND hWnd, UINT msgFilter);
 
-extern int (WINAPI *MsgBoxFun)(HWND, LPCWSTR, LPCWSTR, UINT); // указатель на функцию массаг-бокса
+extern int (WINAPI *MsgBoxFun)(HWND, LPCWSTR, LPCWSTR, UINT); // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ РјР°СЃСЃР°Рі-Р±РѕРєСЃР°
 
-// модальные боксы
+// РјРѕРґР°Р»СЊРЅС‹Рµ Р±РѕРєСЃС‹
 void Mbox();
 void MsgBox(wstring text);
 template<class I> void Mbox(const I i1) { wstring2 str; str << i1; MsgBox(str); }
-// delim - разделительный символ между выводом разных переменных
+// delim - СЂР°Р·РґРµР»РёС‚РµР»СЊРЅС‹Р№ СЃРёРјРІРѕР» РјРµР¶РґСѓ РІС‹РІРѕРґРѕРј СЂР°Р·РЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
 template<class I1, class I2> void Mbox(const I1 i1, const I2 i2, const wchar_t delim = UNI_LF)
 { wstring2 str; str << i1 << delim << i2; MsgBox(str); }
 template<class I1, class I2, class I3> void Mbox(const I1 i1, const I2 i2, const I3 i3, const wchar_t delim = UNI_LF)
 { wstring2 str; str << i1 << delim << i2 << delim << i3; MsgBox(str); }
 template<class I1,class I2,class I3,class I4> void Mbox(const I1 i1,const I2 i2,const I3 i3,const I4 i4,const wchar_t delim = UNI_LF)
 { wstring2 str; str << i1 << delim << i2 << delim << i3 << delim << i4; MsgBox(str); }
-// то же самое с немодальным боксом - с нулевым хендлом
+// С‚Рѕ Р¶Рµ СЃР°РјРѕРµ СЃ РЅРµРјРѕРґР°Р»СЊРЅС‹Рј Р±РѕРєСЃРѕРј - СЃ РЅСѓР»РµРІС‹Рј С…РµРЅРґР»РѕРј
 void Mbox0();
 void MsgBox0(wstring text);
 template<class I> void Mbox0(const I i1) { wstring2 str; str << i1; MsgBox0(str); }
 
-// установка и возврат интервала времени "обычного" таймера в миллисекундах
-// наименьший интервал = 1 мсек (не всегда гарантирован?)
+// СѓСЃС‚Р°РЅРѕРІРєР° Рё РІРѕР·РІСЂР°С‚ РёРЅС‚РµСЂРІР°Р»Р° РІСЂРµРјРµРЅРё "РѕР±С‹С‡РЅРѕРіРѕ" С‚Р°Р№РјРµСЂР° РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
+// РЅР°РёРјРµРЅСЊС€РёР№ РёРЅС‚РµСЂРІР°Р» = 1 РјСЃРµРє (РЅРµ РІСЃРµРіРґР° РіР°СЂР°РЅС‚РёСЂРѕРІР°РЅ?)
 class TimerPeriod
 {
-  static int timerPeriod; // если 0, то неизвестно какой!
+  static int timerPeriod; // РµСЃР»Рё 0, С‚Рѕ РЅРµРёР·РІРµСЃС‚РЅРѕ РєР°РєРѕР№!
 
 public:
   TimerPeriod(int period = 10) { setTimerPeriod(period); }
 
-  int getTimerPeriod() const { return timerPeriod; } // в миллисекундах
+  int getTimerPeriod() const { return timerPeriod; } // РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
 
   bool setTimerPeriod(int period)
   {
-    // пытаемся установить период ближайший "сверху" к заданному
+    // РїС‹С‚Р°РµРјСЃСЏ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРµСЂРёРѕРґ Р±Р»РёР¶Р°Р№С€РёР№ "СЃРІРµСЂС…Сѓ" Рє Р·Р°РґР°РЅРЅРѕРјСѓ
     while ( !timer_resolution(period) ) if (++period > 100) return false;
     timerPeriod = period;
     return true;
   }
 
-  // установка msec-точности таймера, если невозможно - выдает false, напр. при msec=0
-  static bool timer_resolution(uint32 msec) // под W98,2K,XP нормально ставит 1 мсек
+  // СѓСЃС‚Р°РЅРѕРІРєР° msec-С‚РѕС‡РЅРѕСЃС‚Рё С‚Р°Р№РјРµСЂР°, РµСЃР»Рё РЅРµРІРѕР·РјРѕР¶РЅРѕ - РІС‹РґР°РµС‚ false, РЅР°РїСЂ. РїСЂРё msec=0
+  static bool timer_resolution(uint32 msec) // РїРѕРґ W98,2K,XP РЅРѕСЂРјР°Р»СЊРЅРѕ СЃС‚Р°РІРёС‚ 1 РјСЃРµРє
   { return TIMERR_NOERROR == timeBeginPeriod(msec); }
 };
 
 // =============================
 
-// универсальный класс времени и промежутков времени
+// СѓРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ РєР»Р°СЃСЃ РІСЂРµРјРµРЅРё Рё РїСЂРѕРјРµР¶СѓС‚РєРѕРІ РІСЂРµРјРµРЅРё
 class Times
 {
-  int prec_timer_ok; // 1=есть датчик сверх точного времени, 0=нет
+  int prec_timer_ok; // 1=РµСЃС‚СЊ РґР°С‚С‡РёРє СЃРІРµСЂС… С‚РѕС‡РЅРѕРіРѕ РІСЂРµРјРµРЅРё, 0=РЅРµС‚
   LONGLONG t0_hi_res;
   DWORD    t0_low_res;
-  double k_prop; // константа перевода показаний времени в секунды (того датчика, кот. работает)
+  double k_prop; // РєРѕРЅСЃС‚Р°РЅС‚Р° РїРµСЂРµРІРѕРґР° РїРѕРєР°Р·Р°РЅРёР№ РІСЂРµРјРµРЅРё РІ СЃРµРєСѓРЅРґС‹ (С‚РѕРіРѕ РґР°С‚С‡РёРєР°, РєРѕС‚. СЂР°Р±РѕС‚Р°РµС‚)
 
   double Time(bool reset);
   double PrecTime(bool reset);
   LONGLONG longPrecTime() const;
   bool SetupPrecTimer();
 
-  // double время и его промежутки - в секундах
-  double t0; // момент времени начала отсчета промежутков (dt=t-t0), но оно само не используется!
-  double min_dt; // текущая точность датчика времени
+  // double РІСЂРµРјСЏ Рё РµРіРѕ РїСЂРѕРјРµР¶СѓС‚РєРё - РІ СЃРµРєСѓРЅРґР°С…
+  double t0; // РјРѕРјРµРЅС‚ РІСЂРµРјРµРЅРё РЅР°С‡Р°Р»Р° РѕС‚СЃС‡РµС‚Р° РїСЂРѕРјРµР¶СѓС‚РєРѕРІ (dt=t-t0), РЅРѕ РѕРЅРѕ СЃР°РјРѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ!
+  double min_dt; // С‚РµРєСѓС‰Р°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ РґР°С‚С‡РёРєР° РІСЂРµРјРµРЅРё
 
 public:
   enum { def=0, mid, hi };
-  // при resolution=def точность времени от 5 до 20 мсек (на W2K 10 мсек)
-  // при resolution=mid точность около 1.0 миллисекунд
-  // при resolution=hi  точность около 0.3 микросекунд
+  // РїСЂРё resolution=def С‚РѕС‡РЅРѕСЃС‚СЊ РІСЂРµРјРµРЅРё РѕС‚ 5 РґРѕ 20 РјСЃРµРє (РЅР° W2K 10 РјСЃРµРє)
+  // РїСЂРё resolution=mid С‚РѕС‡РЅРѕСЃС‚СЊ РѕРєРѕР»Рѕ 1.0 РјРёР»Р»РёСЃРµРєСѓРЅРґ
+  // РїСЂРё resolution=hi  С‚РѕС‡РЅРѕСЃС‚СЊ РѕРєРѕР»Рѕ 0.3 РјРёРєСЂРѕСЃРµРєСѓРЅРґ
   Times(int resolution = def);
 
-  // меняем разрешение таймера и делаем reset() - меняем время t0 на текущее
+  // РјРµРЅСЏРµРј СЂР°Р·СЂРµС€РµРЅРёРµ С‚Р°Р№РјРµСЂР° Рё РґРµР»Р°РµРј reset() - РјРµРЅСЏРµРј РІСЂРµРјСЏ t0 РЅР° С‚РµРєСѓС‰РµРµ
   bool ResetResolution(int resolution);
 
-  // эту функцию можно использовать для инициализации Random датчиков...
+  // СЌС‚Сѓ С„СѓРЅРєС†РёСЋ РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Random РґР°С‚С‡РёРєРѕРІ...
   static uint32 getTimerTime() { return timeGetTime(); }
 
-  // возвращает время и делает ресет счетчиков на их "внутренние" t0
+  // РІРѕР·РІСЂР°С‰Р°РµС‚ РІСЂРµРјСЏ Рё РґРµР»Р°РµС‚ СЂРµСЃРµС‚ СЃС‡РµС‚С‡РёРєРѕРІ РЅР° РёС… "РІРЅСѓС‚СЂРµРЅРЅРёРµ" t0
   double t(bool reset=false) { return prec_timer_ok? PrecTime(reset):Time(reset); }
-  double time(bool reset=false) { return t(reset); } // синоним t()
+  double time(bool reset=false) { return t(reset); } // СЃРёРЅРѕРЅРёРј t()
 
-  double dt() const; // промежуток времени в секундах с момента t0
-  double dtms() const { return 1000.*dt(); } // то же в миллисекундах
-  int idtms() const { return int(dtms()); } // то же, но в виде целого
+  double dt() const; // РїСЂРѕРјРµР¶СѓС‚РѕРє РІСЂРµРјРµРЅРё РІ СЃРµРєСѓРЅРґР°С… СЃ РјРѕРјРµРЅС‚Р° t0
+  double dtms() const { return 1000.*dt(); } // С‚Рѕ Р¶Рµ РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…
+  int idtms() const { return int(dtms()); } // С‚Рѕ Р¶Рµ, РЅРѕ РІ РІРёРґРµ С†РµР»РѕРіРѕ
 
-  void reset() { t0 = time(true); } // меняем время t0 на текущее
+  void reset() { t0 = time(true); } // РјРµРЅСЏРµРј РІСЂРµРјСЏ t0 РЅР° С‚РµРєСѓС‰РµРµ
 
   double get_t0() const { return t0; }
   double get_min_dt() const { return min_dt; }

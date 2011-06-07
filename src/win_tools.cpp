@@ -1,14 +1,14 @@
-
+п»ї
 #include "stdafx.h"
 
-// ============================= Функции ============================================
+// ============================= Р¤СѓРЅРєС†РёРё ============================================
 
-// pip() в релизе заменять на pipex() т.к. под некоторыми XP pip() зависает!
+// pip() РІ СЂРµР»РёР·Рµ Р·Р°РјРµРЅСЏС‚СЊ РЅР° pipex() С‚.Рє. РїРѕРґ РЅРµРєРѕС‚РѕСЂС‹РјРё XP pip() Р·Р°РІРёСЃР°РµС‚!
 void pip() { pip2(1000, 20); }
-void pip2(int freq, int time) { Beep(freq, time); } // Hz/msec на спикере!
-void pipex() { MessageBeep(UINT(-1)); } // короткий сигнал на звук. карточку!
-// void pipex() { MessageBeep(MB_ICONEXCLAMATION); } // звук подлиннее...
-// void pipex() { MessageBeep(MB_ICONASTERISK); } // звук длиннее и громче
+void pip2(int freq, int time) { Beep(freq, time); } // Hz/msec РЅР° СЃРїРёРєРµСЂРµ!
+void pipex() { MessageBeep(UINT(-1)); } // РєРѕСЂРѕС‚РєРёР№ СЃРёРіРЅР°Р» РЅР° Р·РІСѓРє. РєР°СЂС‚РѕС‡РєСѓ!
+// void pipex() { MessageBeep(MB_ICONEXCLAMATION); } // Р·РІСѓРє РїРѕРґР»РёРЅРЅРµРµ...
+// void pipex() { MessageBeep(MB_ICONASTERISK); } // Р·РІСѓРє РґР»РёРЅРЅРµРµ Рё РіСЂРѕРјС‡Рµ
 
 int EatMessages(HWND hWnd, UINT msgFilter)
 // eat spurious messages msgFilter
@@ -19,9 +19,9 @@ int EatMessages(HWND hWnd, UINT msgFilter)
   return cnt;
 }
 
-// ============================= Классы ============================================
+// ============================= РљР»Р°СЃСЃС‹ ============================================
 
-int TimerPeriod::timerPeriod = 0; // 0=неизвестный период!
+int TimerPeriod::timerPeriod = 0; // 0=РЅРµРёР·РІРµСЃС‚РЅС‹Р№ РїРµСЂРёРѕРґ!
 
 Times::Times(int resolution)
 {
@@ -29,32 +29,32 @@ Times::Times(int resolution)
 }
 
 bool Times::ResetResolution(int resolution)
-// меняем разрешение таймера и делаем reset() - меняем время t0 на текущее
+// РјРµРЅСЏРµРј СЂР°Р·СЂРµС€РµРЅРёРµ С‚Р°Р№РјРµСЂР° Рё РґРµР»Р°РµРј reset() - РјРµРЅСЏРµРј РІСЂРµРјСЏ t0 РЅР° С‚РµРєСѓС‰РµРµ
 {
   prec_timer_ok = 0;
   k_prop = 0.001;
-  min_dt = 0.01; // по умолчанию точность 10 миллисекунд
-  bool res = true; // результат установки нужной точности
+  min_dt = 0.01; // РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ С‚РѕС‡РЅРѕСЃС‚СЊ 10 РјРёР»Р»РёСЃРµРєСѓРЅРґ
+  bool res = true; // СЂРµР·СѓР»СЊС‚Р°С‚ СѓСЃС‚Р°РЅРѕРІРєРё РЅСѓР¶РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё
 
-  // устанавливаем лучшее временное разрешение таймера
+  // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р»СѓС‡С€РµРµ РІСЂРµРјРµРЅРЅРѕРµ СЂР°Р·СЂРµС€РµРЅРёРµ С‚Р°Р№РјРµСЂР°
   if (resolution > 0)
   {
-    // пытаемся включить датчик сверхточного времени
+    // РїС‹С‚Р°РµРјСЃСЏ РІРєР»СЋС‡РёС‚СЊ РґР°С‚С‡РёРє СЃРІРµСЂС…С‚РѕС‡РЅРѕРіРѕ РІСЂРµРјРµРЅРё
     if (resolution == hi) res = SetupPrecTimer();
 
-    // resolution=1 или не получилось resolution=2 - ускоряем обычный таймер
+    // resolution=1 РёР»Рё РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ resolution=2 - СѓСЃРєРѕСЂСЏРµРј РѕР±С‹С‡РЅС‹Р№ С‚Р°Р№РјРµСЂ
     if (resolution == mid || res == false)
     {
       k_prop = 0.001;
       TimerPeriod tp(1);
       int per = tp.getTimerPeriod();
       if (per > 0) min_dt = k_prop * per;
-      // при resolution=1 период таймера не должен быть больше 1 мсек
+      // РїСЂРё resolution=1 РїРµСЂРёРѕРґ С‚Р°Р№РјРµСЂР° РЅРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 1 РјСЃРµРє
       if (resolution == mid && per > 1) res = false;
     }
   }
 
-  // запоминаем текущий момент времени
+  // Р·Р°РїРѕРјРёРЅР°РµРј С‚РµРєСѓС‰РёР№ РјРѕРјРµРЅС‚ РІСЂРµРјРµРЅРё
   reset();
   return res;
 }
@@ -64,7 +64,7 @@ double Times::PrecTime(bool reset) // get actual precision time in seconds
   if (!prec_timer_ok) return 0.;
   LONGLONG t = longPrecTime();
   if (reset) t0_hi_res = t;
-  // точное время в секундах (видимо от включения компьютера)
+  // С‚РѕС‡РЅРѕРµ РІСЂРµРјСЏ РІ СЃРµРєСѓРЅРґР°С… (РІРёРґРёРјРѕ РѕС‚ РІРєР»СЋС‡РµРЅРёСЏ РєРѕРјРїСЊСЋС‚РµСЂР°)
   return k_prop*double(t);
 }
 
@@ -83,11 +83,11 @@ bool Times::SetupPrecTimer()
   int res = QueryPerformanceFrequency(&precFreq);
   if (res) prec_timer_ok = 1;
 
-  // частота св.т. датчика в Гц
+  // С‡Р°СЃС‚РѕС‚Р° СЃРІ.С‚. РґР°С‚С‡РёРєР° РІ Р“С†
   double prec_freq = (double)precFreq.QuadPart;
   if ( prec_freq <= 0.0 ) prec_timer_ok = 0;
 
-  // если датчик в порядке - определяем параметры частоты
+  // РµСЃР»Рё РґР°С‚С‡РёРє РІ РїРѕСЂСЏРґРєРµ - РѕРїСЂРµРґРµР»СЏРµРј РїР°СЂР°РјРµС‚СЂС‹ С‡Р°СЃС‚РѕС‚С‹
   if (prec_timer_ok)
   {
     min_dt = k_prop = 1./prec_freq;
@@ -119,14 +119,14 @@ double Times::dt() const
     dtime = k_prop * dt;
   }
 
-  return max_(0., dtime); // защита от отрицательных пром-в на всякий сл.
+  return max_(0., dtime); // Р·Р°С‰РёС‚Р° РѕС‚ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹С… РїСЂРѕРј-РІ РЅР° РІСЃСЏРєРёР№ СЃР».
 }
 
 // =============================
 
 void Mbox() { MsgBox(L""); }
 
-// по умолчанию мессаг-бокс будет с нулевым хендлом родителя, т.е. не модальный
+// РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РјРµСЃСЃР°Рі-Р±РѕРєСЃ Р±СѓРґРµС‚ СЃ РЅСѓР»РµРІС‹Рј С…РµРЅРґР»РѕРј СЂРѕРґРёС‚РµР»СЏ, С‚.Рµ. РЅРµ РјРѕРґР°Р»СЊРЅС‹Р№
 int (WINAPI *MsgBoxFun)(HWND, LPCWSTR, LPCWSTR, UINT) = MessageBoxW;
 void MsgBox(wstring text)
 {

@@ -1,4 +1,4 @@
-// stdafx.h : include file for standard system include files,
+п»ї// stdafx.h : include file for standard system include files,
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
@@ -18,7 +18,7 @@
 
 using namespace jdksmidi;
 
-#define _WIN32_WINNT 0x0500 // версия начиная с Windows 2000 - надо для консольных функций!
+#define _WIN32_WINNT 0x0500 // РІРµСЂСЃРёСЏ РЅР°С‡РёРЅР°СЏ СЃ Windows 2000 - РЅР°РґРѕ РґР»СЏ РєРѕРЅСЃРѕР»СЊРЅС‹С… С„СѓРЅРєС†РёР№!
 #include <windows.h>
 //#include <windowsx.h>
 

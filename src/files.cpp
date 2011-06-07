@@ -1,7 +1,7 @@
-
+п»ї
 #include "stdafx.h"
 
-// ==================== глобальные file-функции =======================
+// ==================== РіР»РѕР±Р°Р»СЊРЅС‹Рµ file-С„СѓРЅРєС†РёРё =======================
 
 bool read_bin_ex(const wchar_t *file, void *buffer, int &maxbuflen)
 {
@@ -18,7 +18,7 @@ bool read_bin_ex(const wchar_t *file, void *buffer, int &maxbuflen)
 }
 
 int read_bin(const wchar_t *file, void *buffer, int maxbuflen)
-// читает кусок файла с его начала, возвращает число прочитанных байт
+// С‡РёС‚Р°РµС‚ РєСѓСЃРѕРє С„Р°Р№Р»Р° СЃ РµРіРѕ РЅР°С‡Р°Р»Р°, РІРѕР·РІСЂР°С‰Р°РµС‚ С‡РёСЃР»Рѕ РїСЂРѕС‡РёС‚Р°РЅРЅС‹С… Р±Р°Р№С‚
 {
   bool res = read_bin_ex(file, buffer, maxbuflen);
   if (!res) return 0;
@@ -26,7 +26,7 @@ int read_bin(const wchar_t *file, void *buffer, int maxbuflen)
 }
 
 int read_bin_offset(const wchar_t *file, void *buffer, int maxbuflen, int offset)
-// читает кусок файла по текущему смещению, возврящает число прочитанных байт
+// С‡РёС‚Р°РµС‚ РєСѓСЃРѕРє С„Р°Р№Р»Р° РїРѕ С‚РµРєСѓС‰РµРјСѓ СЃРјРµС‰РµРЅРёСЋ, РІРѕР·РІСЂСЏС‰Р°РµС‚ С‡РёСЃР»Рѕ РїСЂРѕС‡РёС‚Р°РЅРЅС‹С… Р±Р°Р№С‚
 {
   if ( maxbuflen <= 0 || offset < 0 ) return 0;
 
@@ -44,13 +44,13 @@ int read_bin_offset(const wchar_t *file, void *buffer, int maxbuflen, int offset
 }
 
 bool write_bin_offset(const wchar_t *file, const void *buffer, int buflen, int offset)
-// записывает кусок файла по текущему смещению из буфера, файл должен существовать!
-// может писать в любую часть файла, в т.ч. с увеличением его первонач-го размера,
-// пропущенные при этом куски заполняются нулями (если смещение больше длины файла)
+// Р·Р°РїРёСЃС‹РІР°РµС‚ РєСѓСЃРѕРє С„Р°Р№Р»Р° РїРѕ С‚РµРєСѓС‰РµРјСѓ СЃРјРµС‰РµРЅРёСЋ РёР· Р±СѓС„РµСЂР°, С„Р°Р№Р» РґРѕР»Р¶РµРЅ СЃСѓС‰РµСЃС‚РІРѕРІР°С‚СЊ!
+// РјРѕР¶РµС‚ РїРёСЃР°С‚СЊ РІ Р»СЋР±СѓСЋ С‡Р°СЃС‚СЊ С„Р°Р№Р»Р°, РІ С‚.С‡. СЃ СѓРІРµР»РёС‡РµРЅРёРµРј РµРіРѕ РїРµСЂРІРѕРЅР°С‡-РіРѕ СЂР°Р·РјРµСЂР°,
+// РїСЂРѕРїСѓС‰РµРЅРЅС‹Рµ РїСЂРё СЌС‚РѕРј РєСѓСЃРєРё Р·Р°РїРѕР»РЅСЏСЋС‚СЃСЏ РЅСѓР»СЏРјРё (РµСЃР»Рё СЃРјРµС‰РµРЅРёРµ Р±РѕР»СЊС€Рµ РґР»РёРЅС‹ С„Р°Р№Р»Р°)
 {
   if ( buflen < 0 || offset < 0 ) return false;
 
-  FILEopen df( file, "r+b" ); // w+b работает не так как надо!
+  FILEopen df( file, "r+b" ); // w+b СЂР°Р±РѕС‚Р°РµС‚ РЅРµ С‚Р°Рє РєР°Рє РЅР°РґРѕ!
   if ( !df ) return false;
 
   if ( fseek(df, offset, SEEK_SET) != 0 ) return false;
@@ -60,7 +60,7 @@ bool write_bin_offset(const wchar_t *file, const void *buffer, int buflen, int o
 }
 
 bool write_bin_append(const wchar_t *file, const void *buffer, int buflen)
-// создает файл с нуля, а если он есть - записывает в файл методом добавления к концу
+// СЃРѕР·РґР°РµС‚ С„Р°Р№Р» СЃ РЅСѓР»СЏ, Р° РµСЃР»Рё РѕРЅ РµСЃС‚СЊ - Р·Р°РїРёСЃС‹РІР°РµС‚ РІ С„Р°Р№Р» РјРµС‚РѕРґРѕРј РґРѕР±Р°РІР»РµРЅРёСЏ Рє РєРѕРЅС†Сѓ
 {
   if ( buflen < 0 ) return false;
 
@@ -72,11 +72,11 @@ bool write_bin_append(const wchar_t *file, const void *buffer, int buflen)
 }
 
 bool write_bin_append2(const wchar_t *file, const void *buffer, int buflen)
-// это write_bin_append() с разрешением коллективного доступа к файлу на чтение/запись
+// СЌС‚Рѕ write_bin_append() СЃ СЂР°Р·СЂРµС€РµРЅРёРµРј РєРѕР»Р»РµРєС‚РёРІРЅРѕРіРѕ РґРѕСЃС‚СѓРїР° Рє С„Р°Р№Р»Сѓ РЅР° С‡С‚РµРЅРёРµ/Р·Р°РїРёСЃСЊ
 {
   if ( buflen < 0 ) return false;
 
-  FILEopen2 df(file, "a+b", _SH_DENYNO); // разрешаем коллективный доступ к файлу на чтение/запись
+  FILEopen2 df(file, "a+b", _SH_DENYNO); // СЂР°Р·СЂРµС€Р°РµРј РєРѕР»Р»РµРєС‚РёРІРЅС‹Р№ РґРѕСЃС‚СѓРї Рє С„Р°Р№Р»Сѓ РЅР° С‡С‚РµРЅРёРµ/Р·Р°РїРёСЃСЊ
   if ( !df ) return false;
 
   int wnum = (int)fwrite( buffer, 1, buflen, df );
@@ -84,7 +84,7 @@ bool write_bin_append2(const wchar_t *file, const void *buffer, int buflen)
 }
 
 bool write_bin(const wchar_t *file, const void *buffer, int buflen, bool create)
-// если create=true - создает и пишет в файл, иначе файл уже должен существовать!
+// РµСЃР»Рё create=true - СЃРѕР·РґР°РµС‚ Рё РїРёС€РµС‚ РІ С„Р°Р№Р», РёРЅР°С‡Рµ С„Р°Р№Р» СѓР¶Рµ РґРѕР»Р¶РµРЅ СЃСѓС‰РµСЃС‚РІРѕРІР°С‚СЊ!
 {
   if ( buflen < 0 ) return false;
 
@@ -156,7 +156,7 @@ uint8 MFile::read_uint8()
   return (uint8) data;
 }
 
-// в read-функциях сначала идет младший байт, затем старший (Intel CPU order)
+// РІ read-С„СѓРЅРєС†РёСЏС… СЃРЅР°С‡Р°Р»Р° РёРґРµС‚ РјР»Р°РґС€РёР№ Р±Р°Р№С‚, Р·Р°С‚РµРј СЃС‚Р°СЂС€РёР№ (Intel CPU order)
 uint32 MFile::read_uint16()
 {
   uint32 val = read_uint8();
@@ -170,7 +170,7 @@ uint32 MFile::read_uint32()
 }
 
 int MFile::eof()
-// макрос feof()
+// РјР°РєСЂРѕСЃ feof()
 {
   return disk_file? feof(file) : mem_eof;
 }

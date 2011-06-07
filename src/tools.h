@@ -1,4 +1,4 @@
-
+п»ї
 #pragma once
 
 const size_t npos = string::npos;
@@ -13,7 +13,7 @@ typedef   signed short   int16;
 typedef   signed int     int32;
 typedef          __int64 int64;
 
-// это для битовых полей
+// СЌС‚Рѕ РґР»СЏ Р±РёС‚РѕРІС‹С… РїРѕР»РµР№
 typedef unsigned int     uint;
 typedef   signed int     sint;
 
@@ -38,17 +38,17 @@ template<class I,class D>inline bool in_range(I mi,D x,I ma) { return x<(D)mi? f
 
 template<class I> inline I min2(I a, I b) { return (a<b? a:b); } // min(a,b)
 template<class I> inline I max2(I a, I b) { return (a>b? a:b); } // max(a,b)
-// синонимы
+// СЃРёРЅРѕРЅРёРјС‹
 template<class I> inline I min_(I a, I b) { return min2(a, b); }
 template<class I> inline I max_(I a, I b) { return max2(a, b); }
-// для 3-х аргументов
+// РґР»СЏ 3-С… Р°СЂРіСѓРјРµРЅС‚РѕРІ
 template<class I> inline I min3(I a, I b, I c) { return min2( min2(a, b), c); }
 template<class I> inline I max3(I a, I b, I c) { return max2( max2(a, b), c); }
-// возвращает "среднее" из 3-х величин, т.е. то что остаётся между максимумом и минимумом
+// РІРѕР·РІСЂР°С‰Р°РµС‚ "СЃСЂРµРґРЅРµРµ" РёР· 3-С… РІРµР»РёС‡РёРЅ, С‚.Рµ. С‚Рѕ С‡С‚Рѕ РѕСЃС‚Р°С‘С‚СЃСЏ РјРµР¶РґСѓ РјР°РєСЃРёРјСѓРјРѕРј Рё РјРёРЅРёРјСѓРјРѕРј
 template<class I> inline I mid3(I a, I b, I c) { sort3(a, b, c); return b; }
-// сортирует (a, b) в порядке возрастания
+// СЃРѕСЂС‚РёСЂСѓРµС‚ (a, b) РІ РїРѕСЂСЏРґРєРµ РІРѕР·СЂР°СЃС‚Р°РЅРёСЏ
 template<class I> inline void sort2(I &a, I &b) { if (a > b) swap(a, b); }
-// сортирует (a, b, c) в порядке возрастания
+// СЃРѕСЂС‚РёСЂСѓРµС‚ (a, b, c) РІ РїРѕСЂСЏРґРєРµ РІРѕР·СЂР°СЃС‚Р°РЅРёСЏ
 template<class I> inline void sort3(I &a, I &b, I &c)
 {
   if (a > b) swap(a, b);
@@ -59,68 +59,68 @@ template<class I> inline void sort3(I &a, I &b, I &c)
   }
 }
 
-// корректировка параметра на не выход за макс и/или мин значения
-template <class T> inline void testmax(T &x, T &ma) { if ( x > ma ) x = ma; } // работает c volatile!
-template <class T> inline void testmin(T &x, T &mi) { if ( x < mi ) x = mi; } // работает c volatile!
-template <class T> inline void testmax(T &x, const T ma) { if ( x > ma ) x = ma; } // для констант
-template <class T> inline void testmin(T &x, const T mi) { if ( x < mi ) x = mi; } // для констант
+// РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° РїР°СЂР°РјРµС‚СЂР° РЅР° РЅРµ РІС‹С…РѕРґ Р·Р° РјР°РєСЃ Рё/РёР»Рё РјРёРЅ Р·РЅР°С‡РµРЅРёСЏ
+template <class T> inline void testmax(T &x, T &ma) { if ( x > ma ) x = ma; } // СЂР°Р±РѕС‚Р°РµС‚ c volatile!
+template <class T> inline void testmin(T &x, T &mi) { if ( x < mi ) x = mi; } // СЂР°Р±РѕС‚Р°РµС‚ c volatile!
+template <class T> inline void testmax(T &x, const T ma) { if ( x > ma ) x = ma; } // РґР»СЏ РєРѕРЅСЃС‚Р°РЅС‚
+template <class T> inline void testmin(T &x, const T mi) { if ( x < mi ) x = mi; } // РґР»СЏ РєРѕРЅСЃС‚Р°РЅС‚
 template <class I, class D> inline void test_max(D &x, I ma) { if ( x > (D)ma ) x = (D)ma; }
 template <class I, class D> inline void test_min(D &x, I mi) { if ( x < (D)mi ) x = (D)mi; }
 template <class I1, class D, class I2> inline void mintestmax(I1 mi, D &x, I2 ma) { test_max(x, ma); test_min(x, mi); }
-template <class I1, class D, class I2> inline void testminxmax(I1 mi, D &x, I2 ma) { mintestmax(mi, x, ma); } // синоним
+template <class I1, class D, class I2> inline void testminxmax(I1 mi, D &x, I2 ma) { mintestmax(mi, x, ma); } // СЃРёРЅРѕРЅРёРј
 
-// абсол-е значение числа
+// Р°Р±СЃРѕР»-Рµ Р·РЅР°С‡РµРЅРёРµ С‡РёСЃР»Р°
 template<class D>inline D abs_(D x) { return x<D(0)? -x:x;}
-// проверка x==y с допустимой _относительной_ ошибкой err>=0, напр. для 7 знаков err=1.e-7
+// РїСЂРѕРІРµСЂРєР° x==y СЃ РґРѕРїСѓСЃС‚РёРјРѕР№ _РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕР№_ РѕС€РёР±РєРѕР№ err>=0, РЅР°РїСЂ. РґР»СЏ 7 Р·РЅР°РєРѕРІ err=1.e-7
 template<class D>inline bool d_eq(D x, D y, D err)
 {
-  D delta = abs_(x-y); // "разница" = модуль разности чисел
-  D maxabs = max_( abs_(x), abs_(y) ); // максимальный модуль чисел
-  return delta <= err*maxabs; // равно если "разница" <= погрешность*максмодуль
+  D delta = abs_(x-y); // "СЂР°Р·РЅРёС†Р°" = РјРѕРґСѓР»СЊ СЂР°Р·РЅРѕСЃС‚Рё С‡РёСЃРµР»
+  D maxabs = max_( abs_(x), abs_(y) ); // РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РјРѕРґСѓР»СЊ С‡РёСЃРµР»
+  return delta <= err*maxabs; // СЂР°РІРЅРѕ РµСЃР»Рё "СЂР°Р·РЅРёС†Р°" <= РїРѕРіСЂРµС€РЅРѕСЃС‚СЊ*РјР°РєСЃРјРѕРґСѓР»СЊ
 }
-// проверка x>y с допустимой _относительной_ ошибкой err>=0
+// РїСЂРѕРІРµСЂРєР° x>y СЃ РґРѕРїСѓСЃС‚РёРјРѕР№ _РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕР№_ РѕС€РёР±РєРѕР№ err>=0
 template<class D>inline bool d_gt(D x, D y, D err)
 {
-  D y1 = y + abs_(err*y); // y1 = y плюс [всегда положительная] добавка
+  D y1 = y + abs_(err*y); // y1 = y РїР»СЋСЃ [РІСЃРµРіРґР° РїРѕР»РѕР¶РёС‚РµР»СЊРЅР°СЏ] РґРѕР±Р°РІРєР°
   return x > y1;
 }
-// проверка x<y с допустимой _относительной_ ошибкой err>=0
+// РїСЂРѕРІРµСЂРєР° x<y СЃ РґРѕРїСѓСЃС‚РёРјРѕР№ _РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕР№_ РѕС€РёР±РєРѕР№ err>=0
 template<class D>inline bool d_lt(D x, D y, D err)
 {
-  D y1 = y - abs_(err*y); // y1 = y минус [всегда положительная] добавка
+  D y1 = y - abs_(err*y); // y1 = y РјРёРЅСѓСЃ [РІСЃРµРіРґР° РїРѕР»РѕР¶РёС‚РµР»СЊРЅР°СЏ] РґРѕР±Р°РІРєР°
   return x < y1;
 }
 
-// проверка x>y (возврат +1), x<y (-1), x==y (0)
-// с допустимой _относительной_ ошибкой err>=0 (но если y=0 то err=0)
+// РїСЂРѕРІРµСЂРєР° x>y (РІРѕР·РІСЂР°С‚ +1), x<y (-1), x==y (0)
+// СЃ РґРѕРїСѓСЃС‚РёРјРѕР№ _РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕР№_ РѕС€РёР±РєРѕР№ err>=0 (РЅРѕ РµСЃР»Рё y=0 С‚Рѕ err=0)
 template<class D>inline int d_gtlteq(D x, D y, D err)
 {
-  D d = abs_(err*y); // неотрицательная _абсолютная_ ошибка
+  D d = abs_(err*y); // РЅРµРѕС‚СЂРёС†Р°С‚РµР»СЊРЅР°СЏ _Р°Р±СЃРѕР»СЋС‚РЅР°СЏ_ РѕС€РёР±РєР°
   if ( x > (y+d) ) return  1;
   if ( x < (y-d) ) return -1;
   return 0;
 }
 
-// произвольное целое x сдвигается к интервалу (0 <= x < num) - меньше num!
-// "порциями" по num величин, где num - целое/беззнаковое, num > 0 !
+// РїСЂРѕРёР·РІРѕР»СЊРЅРѕРµ С†РµР»РѕРµ x СЃРґРІРёРіР°РµС‚СЃСЏ Рє РёРЅС‚РµСЂРІР°Р»Сѓ (0 <= x < num) - РјРµРЅСЊС€Рµ num!
+// "РїРѕСЂС†РёСЏРјРё" РїРѕ num РІРµР»РёС‡РёРЅ, РіРґРµ num - С†РµР»РѕРµ/Р±РµР·Р·РЅР°РєРѕРІРѕРµ, num > 0 !
 template <class I, class U> inline I modulo(I x, U num)
 {
   if (x >= num) x = x % num;
   else
-//if (x < 0)    x =   num - ( (-x) % num ); // было неверно: modulo(-10 10) = 10 вместо 0!
-  if (x < 0)    x = ( num - ( (-x) % num ) ) % num; // теперь верно! исправил 10.06.2010г.
+//if (x < 0)    x =   num - ( (-x) % num ); // Р±С‹Р»Рѕ РЅРµРІРµСЂРЅРѕ: modulo(-10 10) = 10 РІРјРµСЃС‚Рѕ 0!
+  if (x < 0)    x = ( num - ( (-x) % num ) ) % num; // С‚РµРїРµСЂСЊ РІРµСЂРЅРѕ! РёСЃРїСЂР°РІРёР» 10.06.2010Рі.
   // else 0 <= x < num
   return x;
 }
-// тоже самое для D = double/float
+// С‚РѕР¶Рµ СЃР°РјРѕРµ РґР»СЏ D = double/float
 template <class D, class U> inline D modulo_d(D x, U num)
 {
-  if (x < 0.0)  x = (D) fmod( ( num - fmod(-x, num) ), num ); // исправил и не проверил!
+  if (x < 0.0)  x = (D) fmod( ( num - fmod(-x, num) ), num ); // РёСЃРїСЂР°РІРёР» Рё РЅРµ РїСЂРѕРІРµСЂРёР»!
   else
   if (x >= num) x = (D) fmod(x, num);
   return x;
 }
-// определяет количество "порций сдвига" в функции modulo (положительных или отрицательных)
+// РѕРїСЂРµРґРµР»СЏРµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ "РїРѕСЂС†РёР№ СЃРґРІРёРіР°" РІ С„СѓРЅРєС†РёРё modulo (РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹С… РёР»Рё РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹С…)
 template <class I, class U> inline I num_shifts(I x, U num)
 {
   if (x >= 0) x = x / num;
@@ -129,27 +129,27 @@ template <class I, class U> inline I num_shifts(I x, U num)
   return x;
 }
 
-// границы 0 и num для &x (x по ссылке!) склеены в кольцо, т.о. всегда (0 <= x <= num)
+// РіСЂР°РЅРёС†С‹ 0 Рё num РґР»СЏ &x (x РїРѕ СЃСЃС‹Р»РєРµ!) СЃРєР»РµРµРЅС‹ РІ РєРѕР»СЊС†Рѕ, С‚.Рѕ. РІСЃРµРіРґР° (0 <= x <= num)
 template <class I> inline I xring(I &x, I num) { x = modulo(x, num+1); return x; }
-// границы mi и ma для &x (x по ссылке!) склеены в кольцо, т.о. всегда (mi <= x <= ma)
+// РіСЂР°РЅРёС†С‹ mi Рё ma РґР»СЏ &x (x РїРѕ СЃСЃС‹Р»РєРµ!) СЃРєР»РµРµРЅС‹ РІ РєРѕР»СЊС†Рѕ, С‚.Рѕ. РІСЃРµРіРґР° (mi <= x <= ma)
 template <class I> inline I xring(I mi, I &x, I ma) { x = mi + modulo(x-mi, ma-mi+1); return x; }
-// то же самое для x по значению
+// С‚Рѕ Р¶Рµ СЃР°РјРѕРµ РґР»СЏ x РїРѕ Р·РЅР°С‡РµРЅРёСЋ
 template <class I> inline I ring(I x, I num) { return modulo(x, num+1); }
 template <class I> inline I ring(I mi, I x, I ma) { return mi + modulo(x-mi, ma-mi+1); }
 
-// округление float types в integer
+// РѕРєСЂСѓРіР»РµРЅРёРµ float types РІ integer
 template <class D> inline int float2int(D d) { return int( d >= D(0.0) ? (d+D(0.5)):(d-D(0.5))); }
 template <class D> inline unsigned int float2uint(D d) { return  unsigned int(d>=0.0? (d+0.5):(d-0.5)); }
-// умножение любого на float
+// СѓРјРЅРѕР¶РµРЅРёРµ Р»СЋР±РѕРіРѕ РЅР° float
 template <class X, class D> inline void xmulf(X &x, D d) { x = X(x*d); }
 
 // float x, xscale
 template <class D> inline void scale(D &x, D xscale) { x *= xscale; }
 template <class D> inline void scale_int(int &x, D xscale) { x = float2int(x * xscale); }
-// варианты без &
+// РІР°СЂРёР°РЅС‚С‹ Р±РµР· &
 template <class D> inline D dscale(D x, D xscale) { return x * xscale; }
 template <class D> inline int iscale_int(int x, D xscale) { return float2int(x * xscale); }
-// scale "с неуменьшением до 0"
+// scale "СЃ РЅРµСѓРјРµРЅСЊС€РµРЅРёРµРј РґРѕ 0"
 inline void safe_scale_int(int &x, double xscale)
 {
   if ( x == 0 ) return;
@@ -157,9 +157,9 @@ inline void safe_scale_int(int &x, double xscale)
   else   /* x < 0 */ x = min_( -1, float2int(x * xscale) );
 }
 
-// проверять указатель на 0 не нужно: (delete 0) не вызывает проблем! но делать obj = 0 может быть важно...
+// РїСЂРѕРІРµСЂСЏС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° 0 РЅРµ РЅСѓР¶РЅРѕ: (delete 0) РЅРµ РІС‹Р·С‹РІР°РµС‚ РїСЂРѕР±Р»РµРј! РЅРѕ РґРµР»Р°С‚СЊ obj = 0 РјРѕР¶РµС‚ Р±С‹С‚СЊ РІР°Р¶РЅРѕ...
 template <class I> inline void safe_delete_object(I *&obj) { delete obj; obj = 0; }
-// все объекты, созданные при помощи new Type [number] надо удалять так:
+// РІСЃРµ РѕР±СЉРµРєС‚С‹, СЃРѕР·РґР°РЅРЅС‹Рµ РїСЂРё РїРѕРјРѕС‰Рё new Type [number] РЅР°РґРѕ СѓРґР°Р»СЏС‚СЊ С‚Р°Рє:
 template <class I> inline void safe_delete_array(I *&arr)  { delete [] arr; arr = 0; }
 
 template<class I>inline I *new_copy(I *src) { if (!src) return 0; return new I (*src); }
@@ -169,22 +169,22 @@ template<class I,class D>inline I *new_copy2(I*src,D x,D y){ if( !src) return 0;
 template <class I, class D> inline I *new_copy_const2(const I *src, D x, D y)
 { if (!src) return 0; return new I (*src, x, y); }
 
-// функция почленного копирования dst[]=src[] массивов объектов одинаковых
-// или разных типов, допускающих преобразование src типа в dst;
-// num - число копируемых элементов
+// С„СѓРЅРєС†РёСЏ РїРѕС‡Р»РµРЅРЅРѕРіРѕ РєРѕРїРёСЂРѕРІР°РЅРёСЏ dst[]=src[] РјР°СЃСЃРёРІРѕРІ РѕР±СЉРµРєС‚РѕРІ РѕРґРёРЅР°РєРѕРІС‹С…
+// РёР»Рё СЂР°Р·РЅС‹С… С‚РёРїРѕРІ, РґРѕРїСѓСЃРєР°СЋС‰РёС… РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ src С‚РёРїР° РІ dst;
+// num - С‡РёСЃР»Рѕ РєРѕРїРёСЂСѓРµРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ
 template<class TD, class TS> void copy_array(TD *dst, const TS *src, int num)
 {
   for (int i = 0; i < num; i++) dst[i] = src[i];
 }
 
-// очистка широкой строки (например типа wstring2) и вывод в нее значения val (например числа)
+// РѕС‡РёСЃС‚РєР° С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё (РЅР°РїСЂРёРјРµСЂ С‚РёРїР° wstring2) Рё РІС‹РІРѕРґ РІ РЅРµРµ Р·РЅР°С‡РµРЅРёСЏ val (РЅР°РїСЂРёРјРµСЂ С‡РёСЃР»Р°)
 template <class S, class D> inline void out2str(S &str, const D &val){ str = UNI_NULL_STR; str << val; }
 
-// значения val (например числа) конвертируется (путем "печати") в строку текста
+// Р·РЅР°С‡РµРЅРёСЏ val (РЅР°РїСЂРёРјРµСЂ С‡РёСЃР»Р°) РєРѕРЅРІРµСЂС‚РёСЂСѓРµС‚СЃСЏ (РїСѓС‚РµРј "РїРµС‡Р°С‚Рё") РІ СЃС‚СЂРѕРєСѓ С‚РµРєСЃС‚Р°
 template <class D> inline wstring2 out2str(const D &val){ wstring2 str; str << val; return str; }
 
-// даёт строку с побайтным содержимым объекта obj
-// если выравнивание при компиляции класса объекта было грубее 1 байта в конце его может быть мусор!
+// РґР°С‘С‚ СЃС‚СЂРѕРєСѓ СЃ РїРѕР±Р°Р№С‚РЅС‹Рј СЃРѕРґРµСЂР¶РёРјС‹Рј РѕР±СЉРµРєС‚Р° obj
+// РµСЃР»Рё РІС‹СЂР°РІРЅРёРІР°РЅРёРµ РїСЂРё РєРѕРјРїРёР»СЏС†РёРё РєР»Р°СЃСЃР° РѕР±СЉРµРєС‚Р° Р±С‹Р»Рѕ РіСЂСѓР±РµРµ 1 Р±Р°Р№С‚Р° РІ РєРѕРЅС†Рµ РµРіРѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ РјСѓСЃРѕСЂ!
 template <class T> string object_as_text_string(const T &obj)
 {
   const uint8 *objbyte = reinterpret_cast <const uint8 *> (&obj);
@@ -203,14 +203,14 @@ template <class T> string object_as_text_string(const T &obj)
   return out.str();
 }
 
-// ================ прототипы и классы =================
+// ================ РїСЂРѕС‚РѕС‚РёРїС‹ Рё РєР»Р°СЃСЃС‹ =================
 
-// копирует 4 байта src->dst с изменением порядка байтов на обратный: src[0]->dst[3]...
-uint32 reverse_copy_dword(void *dst, uint32 src); // возвращает dst в виде dword
+// РєРѕРїРёСЂСѓРµС‚ 4 Р±Р°Р№С‚Р° src->dst СЃ РёР·РјРµРЅРµРЅРёРµРј РїРѕСЂСЏРґРєР° Р±Р°Р№С‚РѕРІ РЅР° РѕР±СЂР°С‚РЅС‹Р№: src[0]->dst[3]...
+uint32 reverse_copy_dword(void *dst, uint32 src); // РІРѕР·РІСЂР°С‰Р°РµС‚ dst РІ РІРёРґРµ dword
 
-// число сочетаний из n по k: C = n!/k!*(n-k)! = (k+1)*(k+2)*...*n/1*2*...*(n-k)
-uint64 C_n_k(int n, int k); // эта функция "загибается" уже при n = 21, k = 2
-uint64 fC_n_k(int n, int k); // вариант внутри с плав. запятой, даёт гораздо больший рабочий диапазон!
+// С‡РёСЃР»Рѕ СЃРѕС‡РµС‚Р°РЅРёР№ РёР· n РїРѕ k: C = n!/k!*(n-k)! = (k+1)*(k+2)*...*n/1*2*...*(n-k)
+uint64 C_n_k(int n, int k); // СЌС‚Р° С„СѓРЅРєС†РёСЏ "Р·Р°РіРёР±Р°РµС‚СЃСЏ" СѓР¶Рµ РїСЂРё n = 21, k = 2
+uint64 fC_n_k(int n, int k); // РІР°СЂРёР°РЅС‚ РІРЅСѓС‚СЂРё СЃ РїР»Р°РІ. Р·Р°РїСЏС‚РѕР№, РґР°С‘С‚ РіРѕСЂР°Р·РґРѕ Р±РѕР»СЊС€РёР№ СЂР°Р±РѕС‡РёР№ РґРёР°РїР°Р·РѕРЅ!
 
 void pip();
 void SetBit(int &mask, int bitnum, int bitval);
@@ -224,31 +224,31 @@ extern inline int Randu31(uint32 &seed);
 extern inline int Randu16(uint32 &seed);
 extern inline int  Randu8(uint32 &seed);
 
-struct in3 // число из 3-х int компонент, например для RGB масок
+struct in3 // С‡РёСЃР»Рѕ РёР· 3-С… int РєРѕРјРїРѕРЅРµРЅС‚, РЅР°РїСЂРёРјРµСЂ РґР»СЏ RGB РјР°СЃРѕРє
 {
-  int v1, v2, v3; // компоненты
+  int v1, v2, v3; // РєРѕРјРїРѕРЅРµРЅС‚С‹
 
   in3() : v1(0), v2(0), v3(0) {}
-  in3(int eqval) : v1(eqval), v2(eqval), v3(eqval) {} // одинаковые компоненты
-  in3(int v_1, int v_2, int v_3) : v1(v_1), v2(v_2), v3(v_3) {} // разные
+  in3(int eqval) : v1(eqval), v2(eqval), v3(eqval) {} // РѕРґРёРЅР°РєРѕРІС‹Рµ РєРѕРјРїРѕРЅРµРЅС‚С‹
+  in3(int v_1, int v_2, int v_3) : v1(v_1), v2(v_2), v3(v_3) {} // СЂР°Р·РЅС‹Рµ
 
   bool operator==(const int val) const { return (v1==val && v2==val && v3==val); }
   bool operator!=(const int val) const { return (v1!=val || v2!=val || v3!=val); }
 };
 
-struct db3 // число из 3-х double компонент, например для RGB коэффициентов
+struct db3 // С‡РёСЃР»Рѕ РёР· 3-С… double РєРѕРјРїРѕРЅРµРЅС‚, РЅР°РїСЂРёРјРµСЂ РґР»СЏ RGB РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ
 {
-  double v1, v2, v3; // компоненты
+  double v1, v2, v3; // РєРѕРјРїРѕРЅРµРЅС‚С‹
 
   db3() : v1(0.), v2(0.), v3(0.) {}
-  db3(double eqval) : v1(eqval), v2(eqval), v3(eqval) {} // одинаковые компоненты
-  db3(double v_1, double v_2, double v_3) : v1(v_1), v2(v_2), v3(v_3) {} // разные
+  db3(double eqval) : v1(eqval), v2(eqval), v3(eqval) {} // РѕРґРёРЅР°РєРѕРІС‹Рµ РєРѕРјРїРѕРЅРµРЅС‚С‹
+  db3(double v_1, double v_2, double v_3) : v1(v_1), v2(v_2), v3(v_3) {} // СЂР°Р·РЅС‹Рµ
 
   bool operator==(const double val) const { return (v1==val && v2==val && v3==val); }
   bool operator!=(const double val) const { return (v1!=val || v2!=val || v3!=val); }
 };
 
-// объект из нужного количества байт, заполненных константой
+// РѕР±СЉРµРєС‚ РёР· РЅСѓР¶РЅРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° Р±Р°Р№С‚, Р·Р°РїРѕР»РЅРµРЅРЅС‹С… РєРѕРЅСЃС‚Р°РЅС‚РѕР№
 class FillBytes
 {
   uint8 *mem;
@@ -262,7 +262,7 @@ public:
   operator void*() { return mem; }
 };
 
-class Size // вместо недоделанной стандартной структуры SIZE
+class Size // РІРјРµСЃС‚Рѕ РЅРµРґРѕРґРµР»Р°РЅРЅРѕР№ СЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ SIZE
 {
   int cx, cy;
 public:

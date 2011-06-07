@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 bool ParseArgs(int argc, wchar_t *argv[]);

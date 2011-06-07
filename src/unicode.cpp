@@ -1,16 +1,16 @@
-
+п»ї
 #include "stdafx.h"
 
-const wchar_t *UNI_CRLF = L"\r\n"; // в конце каждой строки - пара символов UNI_CR,UNI_LF
-const wchar_t *UNI_NULL_STR = L""; // широкая пустая строка
+const wchar_t *UNI_CRLF = L"\r\n"; // РІ РєРѕРЅС†Рµ РєР°Р¶РґРѕР№ СЃС‚СЂРѕРєРё - РїР°СЂР° СЃРёРјРІРѕР»РѕРІ UNI_CR,UNI_LF
+const wchar_t *UNI_NULL_STR = L""; // С€РёСЂРѕРєР°СЏ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°
 
 string wchar2char(const wchar_t *wstr)
-// конвертация Unicode wchar_t строки в string char строку
+// РєРѕРЅРІРµСЂС‚Р°С†РёСЏ Unicode wchar_t СЃС‚СЂРѕРєРё РІ string char СЃС‚СЂРѕРєСѓ
 {
 //*
   return toNarrowString(wstr);
 /*/
-  // это микрософтовское расширение sprintf - тоже работает...
+  // СЌС‚Рѕ РјРёРєСЂРѕСЃРѕС„С‚РѕРІСЃРєРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ sprintf - С‚РѕР¶Рµ СЂР°Р±РѕС‚Р°РµС‚...
   char st[777];
   sprintf(st, "%S", wstr);
   string str = st;
@@ -19,7 +19,7 @@ string wchar2char(const wchar_t *wstr)
 }
 
 wstring char2wchar(const char *str)
-// конвертация char строки в Unicode wstring строку
+// РєРѕРЅРІРµСЂС‚Р°С†РёСЏ char СЃС‚СЂРѕРєРё РІ Unicode wstring СЃС‚СЂРѕРєСѓ
 {
 //*
   return toWideString(str);
@@ -58,7 +58,7 @@ string toNarrowString(const wchar_t *pStr, int len)
   // figure out how many narrow characters we are going to get 
   int nChars = WideCharToMultiByte(CP_ACP, 0, pStr, len, NULL, 0, NULL, NULL); 
   if (len == -1)   --nChars; 
-  if (nChars == 0) return ""; // узкая пустая строка!
+  if (nChars == 0) return ""; // СѓР·РєР°СЏ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°!
 
   // convert the wide string to a narrow string
   // nb: slightly naughty to write directly into the string like this
@@ -70,26 +70,26 @@ string toNarrowString(const wchar_t *pStr, int len)
 
 /*
 www.RSDN.ru
-конвертация std::string в std::wstring
+РєРѕРЅРІРµСЂС‚Р°С†РёСЏ std::string РІ std::wstring
 
-******* см. версию 10 CC1MG **********
+******* СЃРј. РІРµСЂСЃРёСЋ 10 CC1MG **********
 */
 
 // ====================================================================
 
 bool Unicode_open_wifstream(wifstream &ifstr, const wchar_t *file)
-// открываем wifstream для "прозрачной" работы с Unicode текстовым файлом для чтения
+// РѕС‚РєСЂС‹РІР°РµРј wifstream РґР»СЏ "РїСЂРѕР·СЂР°С‡РЅРѕР№" СЂР°Р±РѕС‚С‹ СЃ Unicode С‚РµРєСЃС‚РѕРІС‹Рј С„Р°Р№Р»РѕРј РґР»СЏ С‡С‚РµРЅРёСЏ
 {
-  // обеспечиваем работу wifstream с Unicode без конвертации
+  // РѕР±РµСЃРїРµС‡РёРІР°РµРј СЂР°Р±РѕС‚Сѓ wifstream СЃ Unicode Р±РµР· РєРѕРЅРІРµСЂС‚Р°С†РёРё
   locale loc = _ADDFAC(locale::classic(), new NullCodecvt);
   ifstr.imbue(loc);
-  // открываем поток в двоичном режиме
+  // РѕС‚РєСЂС‹РІР°РµРј РїРѕС‚РѕРє РІ РґРІРѕРёС‡РЅРѕРј СЂРµР¶РёРјРµ
   ifstr.open(file, ios_base::binary);
   return ifstr.is_open();
 }
 
 bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file)
-// открываем wofstream для "прозрачной" работы с Unicode текстовым файлом для записи
+// РѕС‚РєСЂС‹РІР°РµРј wofstream РґР»СЏ "РїСЂРѕР·СЂР°С‡РЅРѕР№" СЂР°Р±РѕС‚С‹ СЃ Unicode С‚РµРєСЃС‚РѕРІС‹Рј С„Р°Р№Р»РѕРј РґР»СЏ Р·Р°РїРёСЃРё
 {
   locale loc = _ADDFAC(locale::classic(), new NullCodecvt);
   ofstr.imbue(loc);
@@ -98,7 +98,7 @@ bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file)
 }
 
 wstring get_textfile(const wchar_t *file)
-// чтение из текст. файла всего содержимого -> возврат в одной wstring строке
+// С‡С‚РµРЅРёРµ РёР· С‚РµРєСЃС‚. С„Р°Р№Р»Р° РІСЃРµРіРѕ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ -> РІРѕР·РІСЂР°С‚ РІ РѕРґРЅРѕР№ wstring СЃС‚СЂРѕРєРµ
 {
   wifstream fin;
   if (!Unicode_open_wifstream(fin, file))
@@ -108,18 +108,18 @@ wstring get_textfile(const wchar_t *file)
     return str;
   }
 
-  // ввод всех строк текста "внавалку", т.к. нуля в текстовом файле нет!
-  // однако в тексте останутся заголовок файла UNI_HDR и все CR/LF знаки
-  // в виде "нечитаемых" символов!
+  // РІРІРѕРґ РІСЃРµС… СЃС‚СЂРѕРє С‚РµРєСЃС‚Р° "РІРЅР°РІР°Р»РєСѓ", С‚.Рє. РЅСѓР»СЏ РІ С‚РµРєСЃС‚РѕРІРѕРј С„Р°Р№Р»Рµ РЅРµС‚!
+  // РѕРґРЅР°РєРѕ РІ С‚РµРєСЃС‚Рµ РѕСЃС‚Р°РЅСѓС‚СЃСЏ Р·Р°РіРѕР»РѕРІРѕРє С„Р°Р№Р»Р° UNI_HDR Рё РІСЃРµ CR/LF Р·РЅР°РєРё
+  // РІ РІРёРґРµ "РЅРµС‡РёС‚Р°РµРјС‹С…" СЃРёРјРІРѕР»РѕРІ!
 
-  wchar_t delim = 0; // 0 - "граничная" литера для ввода
+  wchar_t delim = 0; // 0 - "РіСЂР°РЅРёС‡РЅР°СЏ" Р»РёС‚РµСЂР° РґР»СЏ РІРІРѕРґР°
   wstring text;
   getline(fin, text, delim);
   return text;
 }
 
 wstring get_textfile_wstring(const wchar_t *file, int index=0)
-// чтение из Unicode текстового файла одной строки (до "\r\n") с номером index
+// С‡С‚РµРЅРёРµ РёР· Unicode С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° РѕРґРЅРѕР№ СЃС‚СЂРѕРєРё (РґРѕ "\r\n") СЃ РЅРѕРјРµСЂРѕРј index
 {
   wifstream fin;
   if (!Unicode_open_wifstream(fin, file))
@@ -129,30 +129,30 @@ wstring get_textfile_wstring(const wchar_t *file, int index=0)
     return str;
   }
 
-  // ввод строки текста до литеры LF, перед которой остается CR
-  wchar_t delim = UNI_LF; // "граничная" литера для ввода
+  // РІРІРѕРґ СЃС‚СЂРѕРєРё С‚РµРєСЃС‚Р° РґРѕ Р»РёС‚РµСЂС‹ LF, РїРµСЂРµРґ РєРѕС‚РѕСЂРѕР№ РѕСЃС‚Р°РµС‚СЃСЏ CR
+  wchar_t delim = UNI_LF; // "РіСЂР°РЅРёС‡РЅР°СЏ" Р»РёС‚РµСЂР° РґР»СЏ РІРІРѕРґР°
   wstring text;
-  // не проверяем наличие очередной строки в файле...
+  // РЅРµ РїСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ РѕС‡РµСЂРµРґРЅРѕР№ СЃС‚СЂРѕРєРё РІ С„Р°Р№Р»Рµ...
   for (int i = 0; i <= index; ++i) getline(fin, text, delim);
 
-  // отбрасываем литеру Unicode заголовка в начале файла
+  // РѕС‚Р±СЂР°СЃС‹РІР°РµРј Р»РёС‚РµСЂСѓ Unicode Р·Р°РіРѕР»РѕРІРєР° РІ РЅР°С‡Р°Р»Рµ С„Р°Р№Р»Р°
   if (index == 0 && text[0] == UNI_HDR) text = text.substr(1);
-   // количество литер в сроке минус 1
+   // РєРѕР»РёС‡РµСЃС‚РІРѕ Р»РёС‚РµСЂ РІ СЃСЂРѕРєРµ РјРёРЅСѓСЃ 1
   size_t sz1 = text.size() - 1;
-  // отбрасываем литеру CR в конце строки
+  // РѕС‚Р±СЂР°СЃС‹РІР°РµРј Р»РёС‚РµСЂСѓ CR РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
   if (text[sz1] == UNI_CR) text = text.substr(0, sz1);
 
   return text;
 }
 
 bool get_textfile_wstring_array(wstring sarray[], int &nums, const wchar_t *file)
-// построчное чтение первых nums строк из Unicode текст. файла -> sarray[nums]
-// если строк меньше, возвращает false и устанавливает nums в число прочитанных
+// РїРѕСЃС‚СЂРѕС‡РЅРѕРµ С‡С‚РµРЅРёРµ РїРµСЂРІС‹С… nums СЃС‚СЂРѕРє РёР· Unicode С‚РµРєСЃС‚. С„Р°Р№Р»Р° -> sarray[nums]
+// РµСЃР»Рё СЃС‚СЂРѕРє РјРµРЅСЊС€Рµ, РІРѕР·РІСЂР°С‰Р°РµС‚ false Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ nums РІ С‡РёСЃР»Рѕ РїСЂРѕС‡РёС‚Р°РЅРЅС‹С…
 {
   wifstream fin;
   if (!Unicode_open_wifstream(fin, file)) return false;
 
-  // построчно копируем файл в массив
+  // РїРѕСЃС‚СЂРѕС‡РЅРѕ РєРѕРїРёСЂСѓРµРј С„Р°Р№Р» РІ РјР°СЃСЃРёРІ
   for (int i = 0; i < nums; ++i)
   {
     wstring text;
@@ -160,12 +160,12 @@ bool get_textfile_wstring_array(wstring sarray[], int &nums, const wchar_t *file
     if (!getline(fin, text, delim))
     {
       nums = i;
-      return false; // если строк меньше чем надо
+      return false; // РµСЃР»Рё СЃС‚СЂРѕРє РјРµРЅСЊС€Рµ С‡РµРј РЅР°РґРѕ
     }
     // else ok
     if (i == 0 && text[0] == UNI_HDR) text = text.substr(1);
     size_t sz1 = text.size() - 1;
-    // отбрасываем \r в конце строки
+    // РѕС‚Р±СЂР°СЃС‹РІР°РµРј \r РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё
     if (text[sz1] == UNI_CR) text = text.substr(0, sz1);
     sarray[i] = text;
   }
@@ -174,18 +174,18 @@ bool get_textfile_wstring_array(wstring sarray[], int &nums, const wchar_t *file
 }
 
 bool Unicode_save_wstring_array(wstring sarray[], int nums, const wchar_t *file)
-// построчная запись первых nums строк из sarray[nums] -> Unicode текст. файл
+// РїРѕСЃС‚СЂРѕС‡РЅР°СЏ Р·Р°РїРёСЃСЊ РїРµСЂРІС‹С… nums СЃС‚СЂРѕРє РёР· sarray[nums] -> Unicode С‚РµРєСЃС‚. С„Р°Р№Р»
 {
   wofstream fout;
   if (!Unicode_open_wofstream(fout, file)) return false;
 
-  fout << UNI_HDR; // сначала пишем заголовок Unicode текста
+  fout << UNI_HDR; // СЃРЅР°С‡Р°Р»Р° РїРёС€РµРј Р·Р°РіРѕР»РѕРІРѕРє Unicode С‚РµРєСЃС‚Р°
 
-  // построчно копируем массив в файл
+  // РїРѕСЃС‚СЂРѕС‡РЅРѕ РєРѕРїРёСЂСѓРµРј РјР°СЃСЃРёРІ РІ С„Р°Р№Р»
   for (int i = 0; i < nums; ++i)
   {
     fout << sarray[i];
-    // выводим символы конца строки, каждый отдельно!!
+    // РІС‹РІРѕРґРёРј СЃРёРјРІРѕР»С‹ РєРѕРЅС†Р° СЃС‚СЂРѕРєРё, РєР°Р¶РґС‹Р№ РѕС‚РґРµР»СЊРЅРѕ!!
     fout << UNI_CR;
     fout << UNI_LF;
   }

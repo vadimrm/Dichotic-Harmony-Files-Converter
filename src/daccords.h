@@ -1,41 +1,41 @@
-/*
+п»ї/*
 */
 
 #pragma once
 
-struct ChainHeader // общие параметры цепочки аккордов DichoticAccord
+struct ChainHeader // РѕР±С‰РёРµ РїР°СЂР°РјРµС‚СЂС‹ С†РµРїРѕС‡РєРё Р°РєРєРѕСЂРґРѕРІ DichoticAccord
 {
-  int transposition; // абсолютный миди номер относительной ноты, равной 0
-  double chain_speed; // скорость проигрывания секвенции, нормальная = 1.0
-  int dont_change_gm_instrument; // если 1, то инструмент не берётся из каждлого аккорда, а
-  int timbre_number; // берётся отсюда - общий миди номер инструмента на всю секвенцию
+  int transposition; // Р°Р±СЃРѕР»СЋС‚РЅС‹Р№ РјРёРґРё РЅРѕРјРµСЂ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕР№ РЅРѕС‚С‹, СЂР°РІРЅРѕР№ 0
+  double chain_speed; // СЃРєРѕСЂРѕСЃС‚СЊ РїСЂРѕРёРіСЂС‹РІР°РЅРёСЏ СЃРµРєРІРµРЅС†РёРё, РЅРѕСЂРјР°Р»СЊРЅР°СЏ = 1.0
+  int dont_change_gm_instrument; // РµСЃР»Рё 1, С‚Рѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚ РЅРµ Р±РµСЂС‘С‚СЃСЏ РёР· РєР°Р¶РґР»РѕРіРѕ Р°РєРєРѕСЂРґР°, Р°
+  int timbre_number; // Р±РµСЂС‘С‚СЃСЏ РѕС‚СЃСЋРґР° - РѕР±С‰РёР№ РјРёРґРё РЅРѕРјРµСЂ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р° РЅР° РІСЃСЋ СЃРµРєРІРµРЅС†РёСЋ
 };
 
-struct DichoticNote // одна дихотическая нота
+struct DichoticNote // РѕРґРЅР° РґРёС…РѕС‚РёС‡РµСЃРєР°СЏ РЅРѕС‚Р°
 {
-  int pause; // если 1, то это не нота, а пауза!
-  int note; // относительный номер ноты
-  double pan; // панорама: -1 левый, 0 центр, 1 правый край
-  int spare1; // "запасное число 1", используется для локальных нужд кода...
+  int pause; // РµСЃР»Рё 1, С‚Рѕ СЌС‚Рѕ РЅРµ РЅРѕС‚Р°, Р° РїР°СѓР·Р°!
+  int note; // РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РЅРѕРјРµСЂ РЅРѕС‚С‹
+  double pan; // РїР°РЅРѕСЂР°РјР°: -1 Р»РµРІС‹Р№, 0 С†РµРЅС‚СЂ, 1 РїСЂР°РІС‹Р№ РєСЂР°Р№
+  int spare1; // "Р·Р°РїР°СЃРЅРѕРµ С‡РёСЃР»Рѕ 1", РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ Р»РѕРєР°Р»СЊРЅС‹С… РЅСѓР¶Рґ РєРѕРґР°...
 };
 
-struct DichoticAccord // структура дихотического аккорда 
+struct DichoticAccord // СЃС‚СЂСѓРєС‚СѓСЂР° РґРёС…РѕС‚РёС‡РµСЃРєРѕРіРѕ Р°РєРєРѕСЂРґР° 
 {
-  // макс. число голосов аккорда, которые поддерживаются данной версией программы
-  static const int MAX_ACC_VOICES = 256; // аппаратный максимум = 128 для XG level 3
+  // РјР°РєСЃ. С‡РёСЃР»Рѕ РіРѕР»РѕСЃРѕРІ Р°РєРєРѕСЂРґР°, РєРѕС‚РѕСЂС‹Рµ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚СЃСЏ РґР°РЅРЅРѕР№ РІРµСЂСЃРёРµР№ РїСЂРѕРіСЂР°РјРјС‹
+  static const int MAX_ACC_VOICES = 256; // Р°РїРїР°СЂР°С‚РЅС‹Р№ РјР°РєСЃРёРјСѓРј = 128 РґР»СЏ XG level 3
   static const int COMMLEN = 16;
 
-  int timbre; // тембр, миди номер инструмента
-  int duration; // длительность в ударах метронома
-  int temp; // параметр темпа, число ударов метронома в секунду
-  int voices_number; // количество голосов в аккорде, 1...MAX_ACC_VOICES, если 0 - это пауза!
-  wchar_t comment[COMMLEN]; // слово "комментария" к аккорду, завершающееся нулём, создаётся вручную в файле
-  int spare1; // "запасное число 1", используется обычно как параметр сортировки...
+  int timbre; // С‚РµРјР±СЂ, РјРёРґРё РЅРѕРјРµСЂ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°
+  int duration; // РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІ СѓРґР°СЂР°С… РјРµС‚СЂРѕРЅРѕРјР°
+  int temp; // РїР°СЂР°РјРµС‚СЂ С‚РµРјРїР°, С‡РёСЃР»Рѕ СѓРґР°СЂРѕРІ РјРµС‚СЂРѕРЅРѕРјР° РІ СЃРµРєСѓРЅРґСѓ
+  int voices_number; // РєРѕР»РёС‡РµСЃС‚РІРѕ РіРѕР»РѕСЃРѕРІ РІ Р°РєРєРѕСЂРґРµ, 1...MAX_ACC_VOICES, РµСЃР»Рё 0 - СЌС‚Рѕ РїР°СѓР·Р°!
+  wchar_t comment[COMMLEN]; // СЃР»РѕРІРѕ "РєРѕРјРјРµРЅС‚Р°СЂРёСЏ" Рє Р°РєРєРѕСЂРґСѓ, Р·Р°РІРµСЂС€Р°СЋС‰РµРµСЃСЏ РЅСѓР»С‘Рј, СЃРѕР·РґР°С‘С‚СЃСЏ РІСЂСѓС‡РЅСѓСЋ РІ С„Р°Р№Р»Рµ
+  int spare1; // "Р·Р°РїР°СЃРЅРѕРµ С‡РёСЃР»Рѕ 1", РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РѕР±С‹С‡РЅРѕ РєР°Рє РїР°СЂР°РјРµС‚СЂ СЃРѕСЂС‚РёСЂРѕРІРєРё...
 
-  // если пауза, то эти параметры могут отсутствовать:
-  int volume; // громкость, 1...127
-  // в этом массиве должно быть место для максимально возможного числа голосов в аккорде
-  DichoticNote dn[MAX_ACC_VOICES]; // дихотические ноты [0]...[voices_num-1] аккорда
+  // РµСЃР»Рё РїР°СѓР·Р°, С‚Рѕ СЌС‚Рё РїР°СЂР°РјРµС‚СЂС‹ РјРѕРіСѓС‚ РѕС‚СЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ:
+  int volume; // РіСЂРѕРјРєРѕСЃС‚СЊ, 1...127
+  // РІ СЌС‚РѕРј РјР°СЃСЃРёРІРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РјРµСЃС‚Рѕ РґР»СЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕ РІРѕР·РјРѕР¶РЅРѕРіРѕ С‡РёСЃР»Р° РіРѕР»РѕСЃРѕРІ РІ Р°РєРєРѕСЂРґРµ
+  DichoticNote dn[MAX_ACC_VOICES]; // РґРёС…РѕС‚РёС‡РµСЃРєРёРµ РЅРѕС‚С‹ [0]...[voices_num-1] Р°РєРєРѕСЂРґР°
 
   void clear_comment() { comment[0] = UNI_NULL; }
 
@@ -49,7 +49,7 @@ struct DichoticAccord // структура дихотического аккорда
   }
 
   bool ok_comment() { return comment[0] != UNI_NULL; }
-  // копируем src аккорд в объект без изменения исходного комментария объекта
+  // РєРѕРїРёСЂСѓРµРј src Р°РєРєРѕСЂРґ РІ РѕР±СЉРµРєС‚ Р±РµР· РёР·РјРµРЅРµРЅРёСЏ РёСЃС…РѕРґРЅРѕРіРѕ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ РѕР±СЉРµРєС‚Р°
   void copy_wo_comment(DichoticAccord &src)
   {
     wstring2 comm( comment );
@@ -63,18 +63,18 @@ class MidiFile;
 
 class DaccordsFile
 {
-  static const int ADDS = 4; // служебные строки в начале файла (формат, комментарий, общие параметры, аббревиатуры)
-  wstring header; // сырой заголовок файла (это ADDS суб-строк, разделённых между собой UNI_CRLF)
-  ChainHeader ch; // декодированный заголовок файла
-  wstring comment; // комментарий из заголовка файла
-  Ar <DichoticAccord> accords; // массив аккордов из файла
-  int errs; // ошибки при чтении daccords файла: если 0 то всё в порядке!
-  int accords_number; // количество аккордов в массиве accords при конвертации из midi
+  static const int ADDS = 4; // СЃР»СѓР¶РµР±РЅС‹Рµ СЃС‚СЂРѕРєРё РІ РЅР°С‡Р°Р»Рµ С„Р°Р№Р»Р° (С„РѕСЂРјР°С‚, РєРѕРјРјРµРЅС‚Р°СЂРёР№, РѕР±С‰РёРµ РїР°СЂР°РјРµС‚СЂС‹, Р°Р±Р±СЂРµРІРёР°С‚СѓСЂС‹)
+  wstring header; // СЃС‹СЂРѕР№ Р·Р°РіРѕР»РѕРІРѕРє С„Р°Р№Р»Р° (СЌС‚Рѕ ADDS СЃСѓР±-СЃС‚СЂРѕРє, СЂР°Р·РґРµР»С‘РЅРЅС‹С… РјРµР¶РґСѓ СЃРѕР±РѕР№ UNI_CRLF)
+  ChainHeader ch; // РґРµРєРѕРґРёСЂРѕРІР°РЅРЅС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє С„Р°Р№Р»Р°
+  wstring comment; // РєРѕРјРјРµРЅС‚Р°СЂРёР№ РёР· Р·Р°РіРѕР»РѕРІРєР° С„Р°Р№Р»Р°
+  Ar <DichoticAccord> accords; // РјР°СЃСЃРёРІ Р°РєРєРѕСЂРґРѕРІ РёР· С„Р°Р№Р»Р°
+  int errs; // РѕС€РёР±РєРё РїСЂРё С‡С‚РµРЅРёРё daccords С„Р°Р№Р»Р°: РµСЃР»Рё 0 С‚Рѕ РІСЃС‘ РІ РїРѕСЂСЏРґРєРµ!
+  int accords_number; // РєРѕР»РёС‡РµСЃС‚РІРѕ Р°РєРєРѕСЂРґРѕРІ РІ РјР°СЃСЃРёРІРµ accords РїСЂРё РєРѕРЅРІРµСЂС‚Р°С†РёРё РёР· midi
 
-  // функции добавления midi аккорда и паузы в daccords массив
+  // С„СѓРЅРєС†РёРё РґРѕР±Р°РІР»РµРЅРёСЏ midi Р°РєРєРѕСЂРґР° Рё РїР°СѓР·С‹ РІ daccords РјР°СЃСЃРёРІ
   void write_accord(int dtms, vector <MIDITimedBigMessage> &accord_events, vector <int> &instr, vector <double> &pan);
 public:
-  DaccordsFile(const wchar_t *file = 0) // если есть - читаем .daccords файл
+  DaccordsFile(const wchar_t *file = 0) // РµСЃР»Рё РµСЃС‚СЊ - С‡РёС‚Р°РµРј .daccords С„Р°Р№Р»
   {
     errs = 0;
     if (file != 0) Read(file);
@@ -89,14 +89,14 @@ public:
     }
   }
 
-  bool Read(const wchar_t *file); // читаем и декодируем daccords файл
-  // запись на диск daccords файла, pan_precision - число дес. знаков после запятой для вывода панорамы
+  bool Read(const wchar_t *file); // С‡РёС‚Р°РµРј Рё РґРµРєРѕРґРёСЂСѓРµРј daccords С„Р°Р№Р»
+  // Р·Р°РїРёСЃСЊ РЅР° РґРёСЃРє daccords С„Р°Р№Р»Р°, pan_precision - С‡РёСЃР»Рѕ РґРµСЃ. Р·РЅР°РєРѕРІ РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№ РґР»СЏ РІС‹РІРѕРґР° РїР°РЅРѕСЂР°РјС‹
   bool Write(const wchar_t *file, int pan_precision, int add_accord_number, int add_accord_comment) const;
 
-  // преобразователь содержимого прочитанного MidiFile в daccords данные
+  // РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚РµР»СЊ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РїСЂРѕС‡РёС‚Р°РЅРЅРѕРіРѕ MidiFile РІ daccords РґР°РЅРЅС‹Рµ
   bool MidiToDaccords(const MidiFile &mfile, int ignore_percussion, double accord_time_lag, int delete_start_pause);
 
-  void OptimizeTransposition(); // делаем транспозицию = минимальный номер ноты, а последний = 0
+  void OptimizeTransposition(); // РґРµР»Р°РµРј С‚СЂР°РЅСЃРїРѕР·РёС†РёСЋ = РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РЅРѕРјРµСЂ РЅРѕС‚С‹, Р° РїРѕСЃР»РµРґРЅРёР№ = 0
 
   int get_accords_number() const { return accords_number; }
   const Ar <DichoticAccord>& arr_accords() const { return accords; }
@@ -105,11 +105,11 @@ public:
   ChainHeader chain_header() const { return ch; }
   int errors() const { return errs; }
 
-  static const wchar_t *daccords_header; // первое слово в начале файла (заголовок)
-  static const int dflt_version = 0; // версия формата файла, который воспринимает код
+  static const wchar_t *daccords_header; // РїРµСЂРІРѕРµ СЃР»РѕРІРѕ РІ РЅР°С‡Р°Р»Рµ С„Р°Р№Р»Р° (Р·Р°РіРѕР»РѕРІРѕРє)
+  static const int dflt_version = 0; // РІРµСЂСЃРёСЏ С„РѕСЂРјР°С‚Р° С„Р°Р№Р»Р°, РєРѕС‚РѕСЂС‹Р№ РІРѕСЃРїСЂРёРЅРёРјР°РµС‚ РєРѕРґ
 
-  // упаковка содержимого файла аккордов df в стрим-строку ws
-  // pan_precision - число дес. знаков после запятой для вывода панорамы, если 0 то даже точки нет!
+  // СѓРїР°РєРѕРІРєР° СЃРѕРґРµСЂР¶РёРјРѕРіРѕ С„Р°Р№Р»Р° Р°РєРєРѕСЂРґРѕРІ df РІ СЃС‚СЂРёРј-СЃС‚СЂРѕРєСѓ ws
+  // pan_precision - С‡РёСЃР»Рѕ РґРµСЃ. Р·РЅР°РєРѕРІ РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№ РґР»СЏ РІС‹РІРѕРґР° РїР°РЅРѕСЂР°РјС‹, РµСЃР»Рё 0 С‚Рѕ РґР°Р¶Рµ С‚РѕС‡РєРё РЅРµС‚!
   friend void ConvertAccordsToString(const DaccordsFile &df, wostringstream &ws, int pan_precision,
                                      int add_accord_number, int add_accord_comment);
 };
@@ -123,9 +123,9 @@ public:
   MidiFile() { tracks = new MIDIMultiTrack(1); }
   ~MidiFile() { delete tracks; }
 
-  bool Read(const wchar_t *file); // читаем и декодируем midi файл
+  bool Read(const wchar_t *file); // С‡РёС‚Р°РµРј Рё РґРµРєРѕРґРёСЂСѓРµРј midi С„Р°Р№Р»
 
-  // сворачиваем все треки в 0-й и если надо затем разворачиваем 0-й трек в треки 0-16
+  // СЃРІРѕСЂР°С‡РёРІР°РµРј РІСЃРµ С‚СЂРµРєРё РІ 0-Р№ Рё РµСЃР»Рё РЅР°РґРѕ Р·Р°С‚РµРј СЂР°Р·РІРѕСЂР°С‡РёРІР°РµРј 0-Р№ С‚СЂРµРє РІ С‚СЂРµРєРё 0-16
   bool CollapseAndExpandMultiTrack(bool expand)
   {
     MIDIMultiTrack *tracks2 = new MIDIMultiTrack(1);
@@ -138,8 +138,8 @@ public:
     if (expand) jdksmidi::CollapseAndExpandMultiTrack( *tracks, *tracks2 );
     else        jdksmidi::CollapseMultiTrack( *tracks, *tracks2 );
 
-    delete tracks; // удаляем исходный объект
-    tracks = tracks2; // указатель на исходный объект теперь указывает на новый объект в tracks2
+    delete tracks; // СѓРґР°Р»СЏРµРј РёСЃС…РѕРґРЅС‹Р№ РѕР±СЉРµРєС‚
+    tracks = tracks2; // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РёСЃС…РѕРґРЅС‹Р№ РѕР±СЉРµРєС‚ С‚РµРїРµСЂСЊ СѓРєР°Р·С‹РІР°РµС‚ РЅР° РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ РІ tracks2
     return true;
   }
 
@@ -172,35 +172,35 @@ public:
     return true;
   }
 
-  // преобразователь содержимого прочитанного DaccordsFile в MIDIMultiTrack
+  // РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚РµР»СЊ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РїСЂРѕС‡РёС‚Р°РЅРЅРѕРіРѕ DaccordsFile РІ MIDIMultiTrack
   bool DaccordsToMidi(const DaccordsFile &dfile, double tick_time_msec, int add_daccords_header,
     int repeat_upto_number, int add_accord_number, int add_accord_comment, int pan_precision, int ignore_percussion);
 
-  // запись MIDIMultiTrack на диск в midi файл, в *midi_tracks_number возвращается число треков
+  // Р·Р°РїРёСЃСЊ MIDIMultiTrack РЅР° РґРёСЃРє РІ midi С„Р°Р№Р», РІ *midi_tracks_number РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ С‡РёСЃР»Рѕ С‚СЂРµРєРѕРІ
   bool Write(const wchar_t *file, int *midi_tracks_number=0) const;
 
   const MIDIMultiTrack * GetMultiTrack() const { return tracks; }
 
   static double round_pan(double pan)
   {
-    // округление pan до 3-х точек: всё что по модулю меньше pan_porog ставим в центр, остальное - по краям панорамы
+    // РѕРєСЂСѓРіР»РµРЅРёРµ pan РґРѕ 3-С… С‚РѕС‡РµРє: РІСЃС‘ С‡С‚Рѕ РїРѕ РјРѕРґСѓР»СЋ РјРµРЅСЊС€Рµ pan_porog СЃС‚Р°РІРёРј РІ С†РµРЅС‚СЂ, РѕСЃС‚Р°Р»СЊРЅРѕРµ - РїРѕ РєСЂР°СЏРј РїР°РЅРѕСЂР°РјС‹
     const double pan_porog = 0.5;
-    if (pan <= -pan_porog) pan = -1.; // лево
+    if (pan <= -pan_porog) pan = -1.; // Р»РµРІРѕ
     else
-    if (pan >= +pan_porog) pan = +1.; // право
-    else                   pan =  0.; // центр
+    if (pan >= +pan_porog) pan = +1.; // РїСЂР°РІРѕ
+    else                   pan =  0.; // С†РµРЅС‚СЂ
     return pan;
   }
 
-  // промежуток времени секунды -> midi тики: справедливо только при tempo = 1e6 !
+  // РїСЂРѕРјРµР¶СѓС‚РѕРє РІСЂРµРјРµРЅРё СЃРµРєСѓРЅРґС‹ -> midi С‚РёРєРё: СЃРїСЂР°РІРµРґР»РёРІРѕ С‚РѕР»СЊРєРѕ РїСЂРё tempo = 1e6 !
   MIDIClockTime seconds2ticks(double seconds) const
   {
     return MIDIClockTime( 0.5 + tracks->GetClksPerBeat()*seconds );
   }
 
-  static const uint32 tempo = 1000000; // темп 1 000 000 usec = 1 sec в четверти
+  static const uint32 tempo = 1000000; // С‚РµРјРї 1 000 000 usec = 1 sec РІ С‡РµС‚РІРµСЂС‚Рё
 
-  static const int NUMCHANS = 16; // макс. количество миди-каналов, включая канал ударных CHANPERC
-  static const int CHANPERC = 9; // номер midi канала ударных инструментов
+  static const int NUMCHANS = 16; // РјР°РєСЃ. РєРѕР»РёС‡РµСЃС‚РІРѕ РјРёРґРё-РєР°РЅР°Р»РѕРІ, РІРєР»СЋС‡Р°СЏ РєР°РЅР°Р» СѓРґР°СЂРЅС‹С… CHANPERC
+  static const int CHANPERC = 9; // РЅРѕРјРµСЂ midi РєР°РЅР°Р»Р° СѓРґР°СЂРЅС‹С… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ
 };
 

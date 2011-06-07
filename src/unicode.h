@@ -1,18 +1,18 @@
-
+п»ї
 #pragma once
 
 template<class T> T & un_volatile(volatile T &t) { return static_cast<T>( t ); } // ???
 
 using namespace std;
 
-const wchar_t UNI_HDR = 0xFEFF; // в начале текстового файла - маркер Unicode текста
-const wchar_t UNI_CR = L'\r'; // в конце каждой строки - пара символов UNI_CR,UNI_LF
+const wchar_t UNI_HDR = 0xFEFF; // РІ РЅР°С‡Р°Р»Рµ С‚РµРєСЃС‚РѕРІРѕРіРѕ С„Р°Р№Р»Р° - РјР°СЂРєРµСЂ Unicode С‚РµРєСЃС‚Р°
+const wchar_t UNI_CR = L'\r'; // РІ РєРѕРЅС†Рµ РєР°Р¶РґРѕР№ СЃС‚СЂРѕРєРё - РїР°СЂР° СЃРёРјРІРѕР»РѕРІ UNI_CR,UNI_LF
 const wchar_t UNI_LF = L'\n';
 const wchar_t UNI_TAB = L'\t';
 const wchar_t UNI_SPACE = L' ';
 const wchar_t UNI_NULL = L'\0';
-extern const wchar_t *UNI_CRLF; // = L"\r\n"; // в конце каждой строки - пара символов UNI_CR,UNI_LF
-extern const wchar_t *UNI_NULL_STR; // = L""; // широкая пустая строка
+extern const wchar_t *UNI_CRLF; // = L"\r\n"; // РІ РєРѕРЅС†Рµ РєР°Р¶РґРѕР№ СЃС‚СЂРѕРєРё - РїР°СЂР° СЃРёРјРІРѕР»РѕРІ UNI_CR,UNI_LF
+extern const wchar_t *UNI_NULL_STR; // = L""; // С€РёСЂРѕРєР°СЏ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°
 
 wstring get_textfile(const wchar_t *file);
 wstring get_textfile_wstring(const wchar_t *file, int index);
@@ -22,17 +22,17 @@ bool Unicode_save_wstring_array(wstring sarray[], int nums, const wchar_t *file)
 bool Unicode_open_wifstream(wifstream &ifstr, const wchar_t *file);
 bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file);
 
-string wchar2char(const wchar_t *wstr); // это синоним toNarrowString(wstr)
+string wchar2char(const wchar_t *wstr); // СЌС‚Рѕ СЃРёРЅРѕРЅРёРј toNarrowString(wstr)
        string toNarrowString(const wchar_t *pStr, int len=-1);
 inline string toNarrowString(const wstring &str) { return toNarrowString(str.c_str(), (int)str.length()); }
 // inline string toNarrowString(const char *pStr, int len=-1) { return len<0? pStr:string(pStr, len); }
 
-wstring char2wchar(const char *str); // это синоним toWideString(str)
+wstring char2wchar(const char *str); // СЌС‚Рѕ СЃРёРЅРѕРЅРёРј toWideString(str)
        wstring toWideString(const char *pStr, int len=-1);
 inline wstring toWideString(const string &str) { return toWideString(str.c_str(), (int)str.length()); }
 // inline wstring toWideString(const wchar_t *pStr, int len=-1) { return len<0? pStr:wstring(pStr, len); }
 
-// wstring2 в сокращенном виде для узких string
+// wstring2 РІ СЃРѕРєСЂР°С‰РµРЅРЅРѕРј РІРёРґРµ РґР»СЏ СѓР·РєРёС… string
 class string2 : public string
 {
 public:
@@ -46,30 +46,30 @@ public:
   operator const char *() const { return this->c_str(); } // string2 -> (const char *)
 };
 
-// это wstring с встроенным преобразованием к типу (const wchar_t *) и др.
-// что позволяет напр. делать функции с аргументами (const wchar_t *)
-// и не делать те же самые функции с аргументами wstring - экономия...
-class wstring2 : public wstring // широкая строка с доп. возможностями ввода-вывода и др.
+// СЌС‚Рѕ wstring СЃ РІСЃС‚СЂРѕРµРЅРЅС‹Рј РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµРј Рє С‚РёРїСѓ (const wchar_t *) Рё РґСЂ.
+// С‡С‚Рѕ РїРѕР·РІРѕР»СЏРµС‚ РЅР°РїСЂ. РґРµР»Р°С‚СЊ С„СѓРЅРєС†РёРё СЃ Р°СЂРіСѓРјРµРЅС‚Р°РјРё (const wchar_t *)
+// Рё РЅРµ РґРµР»Р°С‚СЊ С‚Рµ Р¶Рµ СЃР°РјС‹Рµ С„СѓРЅРєС†РёРё СЃ Р°СЂРіСѓРјРµРЅС‚Р°РјРё wstring - СЌРєРѕРЅРѕРјРёСЏ...
+class wstring2 : public wstring // С€РёСЂРѕРєР°СЏ СЃС‚СЂРѕРєР° СЃ РґРѕРї. РІРѕР·РјРѕР¶РЅРѕСЃС‚СЏРјРё РІРІРѕРґР°-РІС‹РІРѕРґР° Рё РґСЂ.
 {
-  string str; // str _всегда_ содержит узкую копию широкой строки
+  string str; // str _РІСЃРµРіРґР°_ СЃРѕРґРµСЂР¶РёС‚ СѓР·РєСѓСЋ РєРѕРїРёСЋ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
 
-  // преобразование wstring wstr -> str (внутр. узкая копия шир. стр.)
+  // РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ wstring wstr -> str (РІРЅСѓС‚СЂ. СѓР·РєР°СЏ РєРѕРїРёСЏ С€РёСЂ. СЃС‚СЂ.)
   void wstr2str(const wstring &wstr) { str = toNarrowString(wstr); }
-  wstring str2wstr() { return toWideString(str); } // преобразование str -> wstring
+  wstring str2wstr() { return toWideString(str); } // РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ str -> wstring
 
   void this2str() { wstr2str( *(wstring*)this ); } // this -> str
-  void str2this() { *(wstring*)this = str2wstr(); } // преобр-е str -> базовая часть *this
+  void str2this() { *(wstring*)this = str2wstr(); } // РїСЂРµРѕР±СЂ-Рµ str -> Р±Р°Р·РѕРІР°СЏ С‡Р°СЃС‚СЊ *this
 
-  // преобразование в wstring некоторых типов: char, wchar_t, int и т.п. (но не const char [N])
+  // РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ wstring РЅРµРєРѕС‚РѕСЂС‹С… С‚РёРїРѕРІ: char, wchar_t, int Рё С‚.Рї. (РЅРѕ РЅРµ const char [N])
   template<class T> wstring to_wstring(const T &t) { wstring wstr; wstr = t; return wstr; }
 
-  // преобразование в wstring любых типов, через шаблонный конструктор wstring2
+  // РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ wstring Р»СЋР±С‹С… С‚РёРїРѕРІ, С‡РµСЂРµР· С€Р°Р±Р»РѕРЅРЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ wstring2
   template<class T> wstring to_wstring_2(const T &t) { return (wstring)wstring2(t); }
 
 public:
-  // ======= конструкторы - в основном через операторы копирования
+  // ======= РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ - РІ РѕСЃРЅРѕРІРЅРѕРј С‡РµСЂРµР· РѕРїРµСЂР°С‚РѕСЂС‹ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
 
-  wstring2() {} // это wstring2():wstring() {}
+  wstring2() {} // СЌС‚Рѕ wstring2():wstring() {}
   wstring2(const wstring  &wstr) { *this = wstr; }
   wstring2(const wstring2 &wstr2) { *this = wstr2; }
   wstring2(const char *str) { *this = str; }
@@ -79,133 +79,133 @@ public:
   wstring2(const string  &str)  { *this = str; }
   wstring2(const string2 &str2) { *this = (string) str2; }
 
-  // шаблон для некот. др. типов аргументов
+  // С€Р°Р±Р»РѕРЅ РґР»СЏ РЅРµРєРѕС‚. РґСЂ. С‚РёРїРѕРІ Р°СЂРіСѓРјРµРЅС‚РѕРІ
   template<class T> wstring2(const T &t) : wstring( to_wstring(t) ) { this2str(); }
 
-  // ======= операторы сравнения
+  // ======= РѕРїРµСЂР°С‚РѕСЂС‹ СЃСЂР°РІРЅРµРЅРёСЏ
 
-  // для родного типа - используем базовый оператор
+  // РґР»СЏ СЂРѕРґРЅРѕРіРѕ С‚РёРїР° - РёСЃРїРѕР»СЊР·СѓРµРј Р±Р°Р·РѕРІС‹Р№ РѕРїРµСЂР°С‚РѕСЂ
   bool operator==(const wstring2 &t) const { return wstring( *this) == wstring( t ); }
 
-  // для любых типов - преобразуем к родному типу
+  // РґР»СЏ Р»СЋР±С‹С… С‚РёРїРѕРІ - РїСЂРµРѕР±СЂР°Р·СѓРµРј Рє СЂРѕРґРЅРѕРјСѓ С‚РёРїСѓ
   template<class T> bool operator==(const T &t) const { return *this == wstring2( t ); }
 
-  // ======= операторы копирования
+  // ======= РѕРїРµСЂР°С‚РѕСЂС‹ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
 
   wstring2& operator=(const wstring2 &wstr2)
   {
-    if (this == &wstr2) return *this; // самого себя не копируем
-    // копируем _базовую_ часть источника путем преобразования типа указателей!!
+    if (this == &wstr2) return *this; // СЃР°РјРѕРіРѕ СЃРµР±СЏ РЅРµ РєРѕРїРёСЂСѓРµРј
+    // РєРѕРїРёСЂСѓРµРј _Р±Р°Р·РѕРІСѓСЋ_ С‡Р°СЃС‚СЊ РёСЃС‚РѕС‡РЅРёРєР° РїСѓС‚РµРј РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ С‚РёРїР° СѓРєР°Р·Р°С‚РµР»РµР№!!
     *(wstring*)this = *(wstring*)&wstr2;
-    str = wstr2.str; // копируем узкую часть источника
+    str = wstr2.str; // РєРѕРїРёСЂСѓРµРј СѓР·РєСѓСЋ С‡Р°СЃС‚СЊ РёСЃС‚РѕС‡РЅРёРєР°
     return *this;
   };
 
   wstring2& operator=(const wstring &wstr)
   {
-    *(wstring*)this = wstr; // копируем источник в базовую часть объекта
-    this2str(); // апдейт узкой части объекта
+    *(wstring*)this = wstr; // РєРѕРїРёСЂСѓРµРј РёСЃС‚РѕС‡РЅРёРє РІ Р±Р°Р·РѕРІСѓСЋ С‡Р°СЃС‚СЊ РѕР±СЉРµРєС‚Р°
+    this2str(); // Р°РїРґРµР№С‚ СѓР·РєРѕР№ С‡Р°СЃС‚Рё РѕР±СЉРµРєС‚Р°
     return *this;
   };
 
   wstring2& operator=(const string &str)
   {
-    this->str = str; // копируем источник в узкую часть объекта
-    str2this(); // апдейт базовой части объекта
+    this->str = str; // РєРѕРїРёСЂСѓРµРј РёСЃС‚РѕС‡РЅРёРє РІ СѓР·РєСѓСЋ С‡Р°СЃС‚СЊ РѕР±СЉРµРєС‚Р°
+    str2this(); // Р°РїРґРµР№С‚ Р±Р°Р·РѕРІРѕР№ С‡Р°СЃС‚Рё РѕР±СЉРµРєС‚Р°
     return *this;
   };
 
   wstring2& operator=(const wchar_t *wch)
   {
-    wstring wstr(wch); // используем источник в конструкторе широкой строки
-    *this = wstr; // используем оператор копирования wstring2 = wstring 
+    wstring wstr(wch); // РёСЃРїРѕР»СЊР·СѓРµРј РёСЃС‚РѕС‡РЅРёРє РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ С€РёСЂРѕРєРѕР№ СЃС‚СЂРѕРєРё
+    *this = wstr; // РёСЃРїРѕР»СЊР·СѓРµРј РѕРїРµСЂР°С‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ wstring2 = wstring 
     return *this;
   };
 
   wstring2& operator=(const char *ch)
   {
-    string str(ch); // используем источник в конструкторе узкой строки
-    *this = str; // используем оператор копирования wstring2 = string 
+    string str(ch); // РёСЃРїРѕР»СЊР·СѓРµРј РёСЃС‚РѕС‡РЅРёРє РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ СѓР·РєРѕР№ СЃС‚СЂРѕРєРё
+    *this = str; // РёСЃРїРѕР»СЊР·СѓРµРј РѕРїРµСЂР°С‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ wstring2 = string 
     return *this;
   };
 
-  // ======= операторы преобразования типов
+  // ======= РѕРїРµСЂР°С‚РѕСЂС‹ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ С‚РёРїРѕРІ
 
   operator wstring() const { return *(wstring*)this; } // wstring2 -> wstring
   operator string()  const { return str; } // wstring2 -> string
   operator const wchar_t *() const { return this->c_str(); } // wstring2 -> (const wchar_t *)
   operator const char *()    const { return str.c_str(); } // wstring2 -> (const char *)
-  //  wstring2 -> произвольный тип T - используем копию *this, т.к. оператор >> меняет объект
+  //  wstring2 -> РїСЂРѕРёР·РІРѕР»СЊРЅС‹Р№ С‚РёРї T - РёСЃРїРѕР»СЊР·СѓРµРј РєРѕРїРёСЋ *this, С‚.Рє. РѕРїРµСЂР°С‚РѕСЂ >> РјРµРЅСЏРµС‚ РѕР±СЉРµРєС‚
   template<class T> operator T() const { T val; wstring2 wstr2(*this); wstr2 >> val ; return val; }
 
-  // оператор вывода _из_ данной строки в тип аргумента шаблона, сам объект *this
-  // постепенно "тает" по мере многократного вывода!
+  // РѕРїРµСЂР°С‚РѕСЂ РІС‹РІРѕРґР° _РёР·_ РґР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё РІ С‚РёРї Р°СЂРіСѓРјРµРЅС‚Р° С€Р°Р±Р»РѕРЅР°, СЃР°Рј РѕР±СЉРµРєС‚ *this
+  // РїРѕСЃС‚РµРїРµРЅРЅРѕ "С‚Р°РµС‚" РїРѕ РјРµСЂРµ РјРЅРѕРіРѕРєСЂР°С‚РЅРѕРіРѕ РІС‹РІРѕРґР°!
 
   template<class T> wstring2& operator>>(T &t)
   {
-    t = T(); // если объект уже пуст - в t будет "введено" значение пустого конструктора T()
+    t = T(); // РµСЃР»Рё РѕР±СЉРµРєС‚ СѓР¶Рµ РїСѓСЃС‚ - РІ t Р±СѓРґРµС‚ "РІРІРµРґРµРЅРѕ" Р·РЅР°С‡РµРЅРёРµ РїСѓСЃС‚РѕРіРѕ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° T()
     wistringstream wis(*this);
     wis >> t;
-    istream::pos_type n = wis.tellg(); // n = текущая позиция чтения потока
-    // удаляем n начальных символов из базовой части *this
+    istream::pos_type n = wis.tellg(); // n = С‚РµРєСѓС‰Р°СЏ РїРѕР·РёС†РёСЏ С‡С‚РµРЅРёСЏ РїРѕС‚РѕРєР°
+    // СѓРґР°Р»СЏРµРј n РЅР°С‡Р°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ РёР· Р±Р°Р·РѕРІРѕР№ С‡Р°СЃС‚Рё *this
     if ( n != istream::pos_type(-1) ) *(wstring*)this = this->wstring::substr(n);
-    // напр при ws=" 1 " после (ws >> x) в ws остается то что за 1-кой, т.е. один пробел,
-    // а если ws="   1.1" то после (ws >> y) строка ws становится пустой!
-    this2str(); // апдейт узкой части объекта!
+    // РЅР°РїСЂ РїСЂРё ws=" 1 " РїРѕСЃР»Рµ (ws >> x) РІ ws РѕСЃС‚Р°РµС‚СЃСЏ С‚Рѕ С‡С‚Рѕ Р·Р° 1-РєРѕР№, С‚.Рµ. РѕРґРёРЅ РїСЂРѕР±РµР»,
+    // Р° РµСЃР»Рё ws="   1.1" С‚Рѕ РїРѕСЃР»Рµ (ws >> y) СЃС‚СЂРѕРєР° ws СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РїСѓСЃС‚РѕР№!
+    this2str(); // Р°РїРґРµР№С‚ СѓР·РєРѕР№ С‡Р°СЃС‚Рё РѕР±СЉРµРєС‚Р°!
     return *this;
   }
-  // если T = volatile int, то в wistringstream видимо нет (??) оператора >>
+  // РµСЃР»Рё T = volatile int, С‚Рѕ РІ wistringstream РІРёРґРёРјРѕ РЅРµС‚ (??) РѕРїРµСЂР°С‚РѕСЂР° >>
   template<class T> wstring2& operator>>(volatile T &t)
   {
-    T t2; // выводим в объект такого же типа, но без volatile
+    T t2; // РІС‹РІРѕРґРёРј РІ РѕР±СЉРµРєС‚ С‚Р°РєРѕРіРѕ Р¶Рµ С‚РёРїР°, РЅРѕ Р±РµР· volatile
     *this >> t2;
     t = t2;
     return *this;
   }
 
-  // оператор ввода _в_ данную строку: шаблон с произвольным аргументом!
+  // РѕРїРµСЂР°С‚РѕСЂ РІРІРѕРґР° _РІ_ РґР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ: С€Р°Р±Р»РѕРЅ СЃ РїСЂРѕРёР·РІРѕР»СЊРЅС‹Рј Р°СЂРіСѓРјРµРЅС‚РѕРј!
 
   template<class T> wstring2& operator<<(const T &t)
   {
     wostringstream wostr;
     wostr << t;
-    // не присваиваем, а прибавляем новый вывод к базовой части объекта!!!
+    // РЅРµ РїСЂРёСЃРІР°РёРІР°РµРј, Р° РїСЂРёР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ РІС‹РІРѕРґ Рє Р±Р°Р·РѕРІРѕР№ С‡Р°СЃС‚Рё РѕР±СЉРµРєС‚Р°!!!
     *(wstring*)this += wostr.str();
-    // иначе не получится вывод нескольких аргументов в одном операторе!
-    // точно также ведет себя сам класс wostringstream...
-    // т.о. для обнуления строки надо присвоить ей пустую строку (UNI_NULL_STR)
-    this2str(); // апдейт узкой части объекта!
+    // РёРЅР°С‡Рµ РЅРµ РїРѕР»СѓС‡РёС‚СЃСЏ РІС‹РІРѕРґ РЅРµСЃРєРѕР»СЊРєРёС… Р°СЂРіСѓРјРµРЅС‚РѕРІ РІ РѕРґРЅРѕРј РѕРїРµСЂР°С‚РѕСЂРµ!
+    // С‚РѕС‡РЅРѕ С‚Р°РєР¶Рµ РІРµРґРµС‚ СЃРµР±СЏ СЃР°Рј РєР»Р°СЃСЃ wostringstream...
+    // С‚.Рѕ. РґР»СЏ РѕР±РЅСѓР»РµРЅРёСЏ СЃС‚СЂРѕРєРё РЅР°РґРѕ РїСЂРёСЃРІРѕРёС‚СЊ РµР№ РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ (UNI_NULL_STR)
+    this2str(); // Р°РїРґРµР№С‚ СѓР·РєРѕР№ С‡Р°СЃС‚Рё РѕР±СЉРµРєС‚Р°!
     return *this;
   }
-  wstring2& operator<<(const string &str) // уточнение для узких string - иначе не компиляет
+  wstring2& operator<<(const string &str) // СѓС‚РѕС‡РЅРµРЅРёРµ РґР»СЏ СѓР·РєРёС… string - РёРЅР°С‡Рµ РЅРµ РєРѕРјРїРёР»СЏРµС‚
   {
-    wstring wstr = wstring2(str); // преобразуем источник -> wstring2 -> wstring
-    *this << wstr; // используем шаблонный operator<<(const wstring &)
+    wstring wstr = wstring2(str); // РїСЂРµРѕР±СЂР°Р·СѓРµРј РёСЃС‚РѕС‡РЅРёРє -> wstring2 -> wstring
+    *this << wstr; // РёСЃРїРѕР»СЊР·СѓРµРј С€Р°Р±Р»РѕРЅРЅС‹Р№ operator<<(const wstring &)
     return *this;
   }
 /*
-  // уточнение шаблона для C-строк, иначе раньше выводилось значение указателя - но теперь ok!!
+  // СѓС‚РѕС‡РЅРµРЅРёРµ С€Р°Р±Р»РѕРЅР° РґР»СЏ C-СЃС‚СЂРѕРє, РёРЅР°С‡Рµ СЂР°РЅСЊС€Рµ РІС‹РІРѕРґРёР»РѕСЃСЊ Р·РЅР°С‡РµРЅРёРµ СѓРєР°Р·Р°С‚РµР»СЏ - РЅРѕ С‚РµРїРµСЂСЊ ok!!
   wstring2& operator<<(const char *ch)
   {
-    wstring wstr = wstring2(ch); // преобразуем источник -> wstring2 -> wstring
-    *this << wstr; // используем шаблонный operator<<(const wstring &)
+    wstring wstr = wstring2(ch); // РїСЂРµРѕР±СЂР°Р·СѓРµРј РёСЃС‚РѕС‡РЅРёРє -> wstring2 -> wstring
+    *this << wstr; // РёСЃРїРѕР»СЊР·СѓРµРј С€Р°Р±Р»РѕРЅРЅС‹Р№ operator<<(const wstring &)
     return *this;
   }
 */
 
-  // оператор *this += t для произвольного типа правого аргумента T
+  // РѕРїРµСЂР°С‚РѕСЂ *this += t РґР»СЏ РїСЂРѕРёР·РІРѕР»СЊРЅРѕРіРѕ С‚РёРїР° РїСЂР°РІРѕРіРѕ Р°СЂРіСѓРјРµРЅС‚Р° T
   template<class T> wstring2& operator+=(const T &t)
   {
-    // используем оператор += из базового класса wstring, а t преобразуем в wstring
+    // РёСЃРїРѕР»СЊР·СѓРµРј РѕРїРµСЂР°С‚РѕСЂ += РёР· Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР° wstring, Р° t РїСЂРµРѕР±СЂР°Р·СѓРµРј РІ wstring
     *(wstring*)this += to_wstring_2(t);
-    // this->wstring::operator+=( to_wstring_2(t) ); // то же самое по-другому
-    // to_wstring_2() использует шаблон конструктора wstring2, который использует
-    // шаблонную функцию to_wstring(), но напрямую ставить ее - не дает компилер!
-    this2str(); // апдейт узкой части объекта!
+    // this->wstring::operator+=( to_wstring_2(t) ); // С‚Рѕ Р¶Рµ СЃР°РјРѕРµ РїРѕ-РґСЂСѓРіРѕРјСѓ
+    // to_wstring_2() РёСЃРїРѕР»СЊР·СѓРµС‚ С€Р°Р±Р»РѕРЅ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° wstring2, РєРѕС‚РѕСЂС‹Р№ РёСЃРїРѕР»СЊР·СѓРµС‚
+    // С€Р°Р±Р»РѕРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ to_wstring(), РЅРѕ РЅР°РїСЂСЏРјСѓСЋ СЃС‚Р°РІРёС‚СЊ РµРµ - РЅРµ РґР°РµС‚ РєРѕРјРїРёР»РµСЂ!
+    this2str(); // Р°РїРґРµР№С‚ СѓР·РєРѕР№ С‡Р°СЃС‚Рё РѕР±СЉРµРєС‚Р°!
     return *this;
   }
 
-  // оператор (wstring2) + (любой тип);  friend - не член класса - не меняет *this!
+  // РѕРїРµСЂР°С‚РѕСЂ (wstring2) + (Р»СЋР±РѕР№ С‚РёРї);  friend - РЅРµ С‡Р»РµРЅ РєР»Р°СЃСЃР° - РЅРµ РјРµРЅСЏРµС‚ *this!
 
   template<class T> friend wstring2 operator+ (const wstring2 &wstr, const T &t)
   {
@@ -216,11 +216,11 @@ public:
 };
 
 /*
-  // т.о. возможны напр. такие wstring2-игрища с << и +=
+  // С‚.Рѕ. РІРѕР·РјРѕР¶РЅС‹ РЅР°РїСЂ. С‚Р°РєРёРµ wstring2-РёРіСЂРёС‰Р° СЃ << Рё +=
   {
   wstring2 text, t1('A'), t2("t2");
   int val = 40;
-  (text = "random ") << val; // тут нужны скобки, иначе = делается после <<
+  (text = "random ") << val; // С‚СѓС‚ РЅСѓР¶РЅС‹ СЃРєРѕР±РєРё, РёРЅР°С‡Рµ = РґРµР»Р°РµС‚СЃСЏ РїРѕСЃР»Рµ <<
   text << " char1 " << val/20 << " char2 ";
   text += " !";
   scrbox(text, t1, t2);
@@ -229,17 +229,17 @@ public:
 
 
 /*
-  взято из:
+  РІР·СЏС‚Рѕ РёР·:
   Upgrading an STL-based application to use Unicode. By Taka Muraoka.
   http://www.codeproject.com/vcpp/stl/upgradingstlappstounicode.asp
 
-  на основе статьи
+  РЅР° РѕСЃРЅРѕРІРµ СЃС‚Р°С‚СЊРё
   P. J. Plaugher just wrote about this subject in the
   "Standard C++" column of the C/C++ User's Journal.
-  см. часть этой статьи в
+  СЃРј. С‡Р°СЃС‚СЊ СЌС‚РѕР№ СЃС‚Р°С‚СЊРё РІ
   http://groups.google.com/group/comp.std.c++/msg/960feb01524a8f2d?hl=en&lr=&ie=UTF-8&oe=UTF-8
 
-  см. также папку Development\Unicode\rsdn.ru\_wifstream on C++\codecvt\*.h/*.cpp
+  СЃРј. С‚Р°РєР¶Рµ РїР°РїРєСѓ Development\Unicode\rsdn.ru\_wifstream on C++\codecvt\*.h/*.cpp
 */
 
 typedef codecvt<wchar_t, char, mbstate_t> NullCodecvtBase;
