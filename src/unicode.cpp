@@ -33,39 +33,39 @@ wstring char2wchar(const char *str)
 
 wstring toWideString(const char *pStr, int len)
 {
-//  ASSERT_PTR( pStr ) ; 
-//  ASSERT( len >= 0 || len == -1 , _T("Invalid string length: ") << len ) ; 
+//  ASSERT_PTR( pStr ) ;
+//  ASSERT( len >= 0 || len == -1 , _T("Invalid string length: ") << len ) ;
 
-  // figure out how many wide characters we are going to get 
-  int nChars = MultiByteToWideChar(CP_ACP, 0, pStr, len, NULL, 0); 
-  if (len == -1)   --nChars; 
+  // figure out how many wide characters we are going to get
+  int nChars = MultiByteToWideChar(CP_ACP, 0, pStr, len, NULL, 0);
+  if (len == -1)   --nChars;
   if (nChars == 0) return UNI_NULL_STR;
 
-  // convert the narrow string to a wide string 
+  // convert the narrow string to a wide string
   // nb: slightly naughty to write directly into the string like this
   wstring buf;
-  buf.resize(nChars); 
+  buf.resize(nChars);
   // CP_ACP - default to ANSI code page
-  MultiByteToWideChar(CP_ACP, 0, pStr, len, const_cast<wchar_t*>(buf.c_str()), nChars); 
+  MultiByteToWideChar(CP_ACP, 0, pStr, len, const_cast<wchar_t*>(buf.c_str()), nChars);
   return buf;
 }
 
 string toNarrowString(const wchar_t *pStr, int len)
 {
-//  ASSERT_PTR( pStr ) ; 
-//  ASSERT( len >= 0 || len == -1 , _T("Invalid string length: ") << len ) ; 
+//  ASSERT_PTR( pStr ) ;
+//  ASSERT( len >= 0 || len == -1 , _T("Invalid string length: ") << len ) ;
 
-  // figure out how many narrow characters we are going to get 
-  int nChars = WideCharToMultiByte(CP_ACP, 0, pStr, len, NULL, 0, NULL, NULL); 
-  if (len == -1)   --nChars; 
+  // figure out how many narrow characters we are going to get
+  int nChars = WideCharToMultiByte(CP_ACP, 0, pStr, len, NULL, 0, NULL, NULL);
+  if (len == -1)   --nChars;
   if (nChars == 0) return ""; // узкая пустая строка!
 
   // convert the wide string to a narrow string
   // nb: slightly naughty to write directly into the string like this
   string buf;
   buf.resize(nChars);
-  WideCharToMultiByte(CP_ACP, 0, pStr, len, const_cast<char*>(buf.c_str()), nChars, NULL, NULL); 
-  return buf; 
+  WideCharToMultiByte(CP_ACP, 0, pStr, len, const_cast<char*>(buf.c_str()), nChars, NULL, NULL);
+  return buf;
 }
 
 /*
@@ -77,27 +77,31 @@ www.RSDN.ru
 
 // ====================================================================
 
-bool Unicode_open_wifstream(wifstream &ifstr, const wchar_t *file)
+#define _ADDFAC(loc, pfac) locale(loc, pfac) // в @GW нет этого дефайна - берём его из VS хедера <xlocale>
+
+bool Unicode_open_wifstream(wifstream &ifstr, const char *file)
 // открываем wifstream для "прозрачной" работы с Unicode текстовым файлом для чтения
 {
   // обеспечиваем работу wifstream с Unicode без конвертации
   locale loc = _ADDFAC(locale::classic(), new NullCodecvt);
   ifstr.imbue(loc);
+  // оказывается mingw не поддерживает ни wchar_t, ни wstring, по крайней мере в fstream классах...
+  // для решения этой проблемы обычно советуют брать библиотеку STLport, но я это делать не буду...
   // открываем поток в двоичном режиме
-  ifstr.open(file, ios_base::binary);
+  ifstr.open(file, ios_base::binary); // @GW не имеет версии для wchar_t file!
   return ifstr.is_open();
 }
 
-bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file)
+bool Unicode_open_wofstream(wofstream &ofstr, const char *file)
 // открываем wofstream для "прозрачной" работы с Unicode текстовым файлом для записи
 {
   locale loc = _ADDFAC(locale::classic(), new NullCodecvt);
   ofstr.imbue(loc);
-  ofstr.open(file, ios_base::binary);
+  ofstr.open(file, ios_base::binary); // @GW не имеет версии для wchar_t file!
   return ofstr.is_open();
 }
 
-wstring get_textfile(const wchar_t *file)
+wstring get_textfile(const char *file)
 // чтение из текст. файла всего содержимого -> возврат в одной wstring строке
 {
   wifstream fin;
@@ -118,7 +122,7 @@ wstring get_textfile(const wchar_t *file)
   return text;
 }
 
-wstring get_textfile_wstring(const wchar_t *file, int index=0)
+wstring get_textfile_wstring(const char *file, int index=0)
 // чтение из Unicode текстового файла одной строки (до "\r\n") с номером index
 {
   wifstream fin;
@@ -145,7 +149,7 @@ wstring get_textfile_wstring(const wchar_t *file, int index=0)
   return text;
 }
 
-bool get_textfile_wstring_array(wstring sarray[], int &nums, const wchar_t *file)
+bool get_textfile_wstring_array(wstring sarray[], int &nums, const char *file)
 // построчное чтение первых nums строк из Unicode текст. файла -> sarray[nums]
 // если строк меньше, возвращает false и устанавливает nums в число прочитанных
 {
@@ -173,7 +177,7 @@ bool get_textfile_wstring_array(wstring sarray[], int &nums, const wchar_t *file
   return true;
 }
 
-bool Unicode_save_wstring_array(wstring sarray[], int nums, const wchar_t *file)
+bool Unicode_save_wstring_array(wstring sarray[], int nums, const char *file)
 // построчная запись первых nums строк из sarray[nums] -> Unicode текст. файл
 {
   wofstream fout;

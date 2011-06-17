@@ -182,7 +182,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\2h_converter.cpp"
+				RelativePath=".\amain.cpp"
 				>
 			</File>
 			<File
@@ -191,6 +191,10 @@
 			</File>
 			<File
 				RelativePath=".\files.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\random.cpp"
 				>
 			</File>
 			<File
@@ -208,7 +212,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\2h_converter.h"
+				RelativePath=".\amain.h"
 				>
 			</File>
 			<File
@@ -221,6 +225,10 @@
 			</File>
 			<File
 				RelativePath=".\files.h"
+				>
+			</File>
+			<File
+				RelativePath=".\random.h"
 				>
 			</File>
 			<File

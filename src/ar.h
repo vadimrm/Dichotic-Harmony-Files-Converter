@@ -17,7 +17,7 @@ template<class T, int fast = FAST_ARRAY> class Ar // 9 сентября 2010 г.
   // для массивов одинаковых типов метод копирования выбирается по this массиву, а для разных типов он всегда медленный!
 
   T* new_memory(int elems); // выделяет новую память
-  void make_array(int elems, bool need_clear); // выделяет новую память под массив, если надо - стирает его
+  bool make_array(int elems, bool need_clear); // выделяет новую память под массив, если надо - стирает его
 
   // запрещенные функции:
   // template<class T2> void operator=(T2 &src); // запрет = из других типов! НО: не компилится...
@@ -41,7 +41,7 @@ public:
   template<int number> Ar<T,fast>& copy_to(T (&dst)[number]) const { return copy_to(dst, number); }
 
   // перевыделяет и стирает память для нового количества членов, если такое же - то просто стирает
-  void renew(int elems, bool need_clear = true); // не стирает если need_clear = false!
+  bool renew(int elems, bool need_clear = false); // не стирает если need_clear = false! ранее было true по умолчанию!
 
   // если массив мал, увеличивает его размер до нужного минимума без потери исх. содержимого (ост. элементы нулевые)
   void expand_to_nums(int min_elems, bool need_clear = true); // если не мал, то ничего не делает
@@ -98,7 +98,7 @@ public:
 
   // прибавление массива src в конец массива this с увеличением его размера: this += src
   Ar<T,fast>& operator+=(const Ar<T,fast> &src)
-  { 
+  {
     int n0 = elements(); // длина this до прибавления src
     int n1 = src.elements(); // длина src
     expand_to_nums( n0 + n1, false ); // увеличиваем this до суммарной длины, без стирания
@@ -109,9 +109,10 @@ public:
 
 #pragma pack(pop)
 
-template<class T,int fast> void Ar<T,fast>::make_array(int elems, bool need_clear)
+template<class T,int fast> bool Ar<T,fast>::make_array(int elems, bool need_clear)
 {
   mem = new_memory(elems);
+  if (!mem) return false;
 
   /*
   В топике "new Operator (C++)" MSDN говорит что для VS2005:
@@ -125,6 +126,7 @@ template<class T,int fast> void Ar<T,fast>::make_array(int elems, bool need_clea
   */
 
   if (need_clear) clear(); // поэтому по умолчанию стираем память - см. конструктор Ar!
+  return true;
 }
 
 template<class T,int fast> T* Ar<T,fast>::new_memory(int elems)
@@ -141,8 +143,8 @@ template<class T,int fast> Ar<T,fast>::Ar(int elems) : fastmem(fast)
 
 template<class T,int fast> Ar<T,fast>::Ar(int elems, bool need_fill, const T val) : fastmem(fast)
 {
-  make_array(elems, false);
-  if (need_fill) fill(val);
+  if ( make_array(elems, false) )
+    if (need_fill) fill(val);
 }
 
 template<class T,int fast> Ar<T,fast>::Ar(const Ar<T,fast> &src)
@@ -208,15 +210,16 @@ template<class T,int fast> void Ar<T,fast>::fill(const T val)
   }
 }
 
-template<class T,int fast> void Ar<T,fast>::renew(int elems, bool need_clear)
+template<class T,int fast> bool Ar<T,fast>::renew(int elems, bool need_clear)
 {
   int new_elems = max2(0, elems);
   if ( new_elems != elements() )
   {
     safe_delete_array( mem );
-    make_array(new_elems, need_clear);
+    return make_array(new_elems, need_clear);
   }
   else if (need_clear) clear(); // для единообразия стираем массив
+  return true;
 }
 
 template<class T,int fast> Ar<T,fast>& Ar<T,fast>::operator=(const Ar<T,fast> &src)

@@ -14,13 +14,16 @@ const wchar_t UNI_NULL = L'\0';
 extern const wchar_t *UNI_CRLF; // = L"\r\n"; // в конце каждой строки - пара символов UNI_CR,UNI_LF
 extern const wchar_t *UNI_NULL_STR; // = L""; // широкая пустая строка
 
-wstring get_textfile(const wchar_t *file);
-wstring get_textfile_wstring(const wchar_t *file, int index);
-bool get_textfile_wstring_array(wstring sarray[], int &nums, const wchar_t *file);
+wstring get_textfile(const char *file);
+wstring get_textfile_wstring(const char *file, int index);
+bool get_textfile_wstring_array(wstring sarray[], int &nums, const char *file);
 
-bool Unicode_save_wstring_array(wstring sarray[], int nums, const wchar_t *file);
-bool Unicode_open_wifstream(wifstream &ifstr, const wchar_t *file);
-bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file);
+// bool Unicode_save_wstring_array(wstring sarray[], int nums, const wchar_t *file); // VS
+// bool Unicode_open_wifstream(wifstream &ifstr, const wchar_t *file); // VS
+// bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file); // VS
+bool Unicode_save_wstring_array(wstring sarray[], int nums, const char *file); // @GW
+bool Unicode_open_wifstream(wifstream &ifstr, const char *file); // @GW
+bool Unicode_open_wofstream(wofstream &ofstr, const char *file); // @GW
 
 string wchar2char(const wchar_t *wstr); // это синоним toNarrowString(wstr)
        string toNarrowString(const wchar_t *pStr, int len=-1);
@@ -71,7 +74,11 @@ public:
 
   wstring2() {} // это wstring2():wstring() {}
   wstring2(const wstring  &wstr) { *this = wstr; }
-  wstring2(const wstring2 &wstr2) { *this = wstr2; }
+
+//  wstring2(const wstring2 &wstr2) { *this = wstr2; } // VC
+  // warning: base class should be explicitly initialized in the copy constructor
+  wstring2(const wstring2 &wstr2) : wstring(wstr2) { *this = wstr2; } // @GW
+
   wstring2(const char *str) { *this = str; }
   wstring2(      char *str) { *this = str; } // ?
   wstring2(const wchar_t *wstr) { *this = wstr; }
@@ -96,7 +103,9 @@ public:
   {
     if (this == &wstr2) return *this; // самого себя не копируем
     // копируем _базовую_ часть источника путем преобразования типа указателей!!
-    *(wstring*)this = *(wstring*)&wstr2;
+    *(wstring*)this = *(wstring*)&wstr2; // проверено - работает!
+    // но Дж.Элджер в книге C++ 2000 г. на стр. 58 пишет что надо по другому:
+    // this->wstring::operator=(wstr2); // проверено - работает также!
     str = wstr2.str; // копируем узкую часть источника
     return *this;
   };
@@ -118,14 +127,14 @@ public:
   wstring2& operator=(const wchar_t *wch)
   {
     wstring wstr(wch); // используем источник в конструкторе широкой строки
-    *this = wstr; // используем оператор копирования wstring2 = wstring 
+    *this = wstr; // используем оператор копирования wstring2 = wstring
     return *this;
   };
 
   wstring2& operator=(const char *ch)
   {
     string str(ch); // используем источник в конструкторе узкой строки
-    *this = str; // используем оператор копирования wstring2 = string 
+    *this = str; // используем оператор копирования wstring2 = string
     return *this;
   };
 
@@ -239,8 +248,12 @@ public:
   см. часть этой статьи в
   http://groups.google.com/group/comp.std.c++/msg/960feb01524a8f2d?hl=en&lr=&ie=UTF-8&oe=UTF-8
 
-  см. также папку Development\Unicode\rsdn.ru\_wifstream on C++\codecvt\*.h/*.cpp
+  см. также папку Development\Unicode\rsdn.ru\_wifstream on C++\codecvt\ *.h и *.cpp файлы
 */
+
+#ifndef _THROW0
+#define _THROW0() throw() // в @GW нет этого дефайна - берём его из VS хедера <xstddef>
+#endif
 
 typedef codecvt<wchar_t, char, mbstate_t> NullCodecvtBase;
 
@@ -254,13 +267,10 @@ public:
   explicit NullCodecvt(size_t _R = 0):NullCodecvtBase(_R) {}
 
 protected:
-  virtual result do_in(_St& _State, const _To *_F1, const _To *_L1, const _To *&_Mid1,
-                       _E *F2, _E *_L2, _E *&_Mid2) const { return noconv; }
-  virtual result do_out(_St& _State, const _E *_F1, const _E *_L1, const _E *&_Mid1,
-                        _To *F2, _E *_L2, _To *&_Mid2) const { return noconv; }
+  virtual result do_in(_St& _State,const _To *_F1,const _To *_L1,const _To *&_Mid1,_E *F2,_E *_L2,_E *&_Mid2) const { return noconv; }
+  virtual result do_out(_St& _State,const _E *_F1,const _E *_L1,const _E *&_Mid1,_To *F2,_E *_L2,_To *&_Mid2) const { return noconv; }
   virtual result do_unshift(_St& _State, _To *_F2, _To *_L2, _To *&_Mid2) const { return noconv; }
-  virtual int do_length(_St& _State, const _To *_F1, const _To *_L1, size_t _N2) const _THROW0()
-              { return (int)(_N2 < (size_t)(_L1 - _F1)? _N2 : _L1 - _F1); }
+  virtual int do_length(_St& _State,const _To *_F1,const _To *_L1,size_t _N2) const _THROW0() { return (int)(_N2 < (size_t)(_L1 - _F1)? _N2:_L1-_F1); }
   virtual bool do_always_noconv() const _THROW0() { return true; }
   virtual int do_max_length() const _THROW0() { return 2; }
   virtual int do_encoding() const _THROW0() { return 2; }

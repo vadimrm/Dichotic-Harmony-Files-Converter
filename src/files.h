@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <share.h>
+
 const int FILE_STRLEN = MAX_PATH+64; // 260+64
 
 bool file_exist(const wchar_t *file);
@@ -33,7 +35,10 @@ class FILEopen // простой "открыватель" файла с само
 {
   FILE *pfile;
 public:
-  FILEopen(const wstring2 filename, const wstring2 mode) { _wfopen_s(&pfile, filename, mode); }
+// FILEopen(const wstring2 filename, const wstring2 mode) { _wfopen_s(&pfile, filename, mode); } // VS
+  // в @GW нет VS-функции _wfopen_s, заменяем на эквивалентную
+  FILEopen(const wstring2 filename, const wstring2 mode) { pfile = _wfopen(filename, mode); } // @GW
+
   // деструктор закрывает файл, это можно сделать и до уничтожения объекта: (*this).~FILEopen();
   ~FILEopen() { if (pfile) fclose( pfile ); pfile = NULL; }
   operator FILE*() { return pfile; }  // доступ к *pfile  при помощи (FILE*)(*this)
@@ -42,18 +47,19 @@ public:
   bool openok() { return pfile != NULL; }
 };
 
-class FILEopen2 // FILEopen с расшариванием доступа к файлу
-{
-  FILE *pfile;
-public:
 /*
-The argument shflag is a constant expression consisting of one of the following constants, defined in Share.h:
+The argument shflag is a constant expression consisting of one of the following constants,
+defined in share.h:
 _SH_COMPAT Sets Compatibility mode for 16-bit applications.
 _SH_DENYNO Permits read and write access.
 _SH_DENYRD Denies read access to the file.
 _SH_DENYRW Denies read and write access to the file.
 _SH_DENYWR Denies write access to the file.
 */
+class FILEopen2 // FILEopen с расшариванием доступа к файлу
+{
+  FILE *pfile;
+public:
   FILEopen2(const wstring2 filename, const wstring2 mode, int shflag) { pfile = _wfsopen(filename, mode, shflag); }
   // деструктор закрывает файл, это можно сделать и до уничтожения объекта: (*this).~FILEopen();
   ~FILEopen2() { if (pfile) fclose( pfile ); pfile = NULL; }
@@ -107,9 +113,9 @@ public:
     file = filename;
     len = get_file_length(file);
     if (len <= 0) { len = 0; return; }
- 
+
     // оставляем в конце буфера 2 нулевых байта - для нужд текстовых файлов!
-    buf.renew(len+2);
+    buf.renew(len+2, false); // не стираем память
     read_bin(file, buf.memory(), len);
     buf[len] = buf[len+1] = 0;
 

@@ -148,9 +148,9 @@ bool DaccordsFile::Read(const wchar_t *file)
   int i;
   for (i = 0; i <= max_file_strings; ++i)
   {
-    if (i == max_file_strings) // количество строк превысило максимум
+    if (i == max_file_strings) // количество строк превысило максимум - увеличиваем их на 500
     {
-      max_file_strings += 500; // было 100
+      max_file_strings += 500;
       pstr.expand_to_nums(max_file_strings);
     }
     pstr[i] = fstr;
@@ -246,7 +246,7 @@ bool DaccordsFile::Read(const wchar_t *file)
 
     // вводим комментарий аккорда, пропуская возможно отсутствующий номер аккорда с префиксом ACC_NUM_PREFIX
     wstring s3, comm;
-    // вводим в строку s3 одно слово, следующее за концом аккорда 
+    // вводим в строку s3 одно слово, следующее за концом аккорда
     is >> s3;
     // если слово в s3 начинается с префикса номера аккорда, то комментарий будет в следующем слове!
     if ( s3.c_str()[0] == *ACC_NUM_PREFIX ) is >> comm; // вводим следующее слово
@@ -259,6 +259,8 @@ bool DaccordsFile::Read(const wchar_t *file)
     accords[i] = acc;
   }
 
+  // запоминаем общее число аккордов
+  accords_number = num_accords;
   return true;
 }
 
@@ -377,11 +379,11 @@ void DaccordsFile::write_accord(int dtms, vector <MIDITimedBigMessage> &accord_e
   acc.timbre = instr;
 
   // добавляем аккорд acc к массиву аккордов музыки accords
-//  if (dtms > 0) 
+//  if (dtms > 0)
   {
     int anum = accords.elements();
-    // если больше нет места в массиве - увеличиваем его на 100 аккордов
-    if ( accords_number >= anum ) accords.expand_to_nums( anum + 100 );
+    // если больше нет места в массиве - увеличиваем его на 500 аккордов
+    if ( accords_number >= anum ) accords.expand_to_nums( anum + 500 );
     accords[accords_number++] = acc;
 //    cout << " accords_number " << accords_number << "  dtms " << dtms;
   }
@@ -485,8 +487,9 @@ bool DaccordsFile::MidiToDaccords(const MidiFile &mfile, int ignore_percussion, 
 
   // определяем количество midi событий во всех треках
   int num_events = mt->GetNumEvents();
-  // меняем размер массива аккордов из расчёта 1 событие = 1 аккорд (или пауза)
-  accords.renew(num_events, true); // и стираем аккорды!
+  // меняем размер массива аккордов из расчёта 2 события = 1 нота = 1 аккорд (если не хватит - потом добавляем)
+  // не стираем массив accords: каждый новый аккорд будет скопирован в этот массив!
+  accords.renew(num_events/2, false); // при true большие массивы стираются очень долго!
   // сначала массив без музыки
   accords_number = 0;
 
@@ -667,7 +670,7 @@ bool DaccordsFile::Write(const wchar_t *file, int pan_precision, int add_accord_
   // без этого промежуточного приравнивания дальнейший код работал неверно!
   wstring ws = wss.str();
 
-  // буфер текста и размер буфера в байтах 
+  // буфер текста и размер буфера в байтах
   const void *file_buf = ws.c_str();
   int file_bytes = sizeof(wchar_t)*ws.size();
 
@@ -804,7 +807,7 @@ bool MidiFile::DaccordsToMidi(const DaccordsFile &dfile, double tick_time_msec, 
       // длительность аккорда в midi-тиках
       MIDIClockTime dur_tick = seconds2ticks( dur_sec );
 
-      if (acc.voices_number == 0) // весь аккорд - это пауза 
+      if (acc.voices_number == 0) // весь аккорд - это пауза
       {
         last_pause = true;
         time += dur_tick;

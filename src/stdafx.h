@@ -7,14 +7,14 @@
 
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
-#include "jdksmidi/world.h"
-#include "jdksmidi/track.h"
-#include "jdksmidi/multitrack.h"
-#include "jdksmidi/filereadmultitrack.h"
-#include "jdksmidi/fileread.h"
-#include "jdksmidi/fileshow.h"
-#include "jdksmidi/filewritemultitrack.h"
-#include "jdksmidi/sequencer.h"
+#include "../libjdksmidi/include/jdksmidi/world.h"
+#include "../libjdksmidi/include/jdksmidi/track.h"
+#include "../libjdksmidi/include/jdksmidi/multitrack.h"
+#include "../libjdksmidi/include/jdksmidi/filereadmultitrack.h"
+#include "../libjdksmidi/include/jdksmidi/fileread.h"
+#include "../libjdksmidi/include/jdksmidi/fileshow.h"
+#include "../libjdksmidi/include/jdksmidi/filewritemultitrack.h"
+#include "../libjdksmidi/include/jdksmidi/sequencer.h"
 
 using namespace jdksmidi;
 
@@ -37,9 +37,10 @@ using namespace jdksmidi;
 
 #include "unicode.h"
 #include "tools.h"
+#include "random.h"
 #include "ar.h"
 #include "files.h"
 #include "win_tools.h"
 #include "daccords.h"
-#include "2h_converter.h"
+#include "amain.h"
 

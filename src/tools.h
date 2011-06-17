@@ -14,10 +14,10 @@ typedef   signed int     int32;
 typedef          __int64 int64;
 
 // это для битовых полей
-typedef unsigned int     uint;
+typedef unsigned int     uint; // конфликтует с libjdksmidi
 typedef   signed int     sint;
 
-#define NULL 0
+// #define NULL 0 // @GW справедливо не разрешает переопределять NULL
 
 const double two16 = 65536.; // 2^16
 const double two32 = two16*two16; // 2^32 = 4294967296
@@ -139,7 +139,11 @@ template <class I> inline I ring(I mi, I x, I ma) { return mi + modulo(x-mi, ma-
 
 // округление float types в integer
 template <class D> inline int float2int(D d) { return int( d >= D(0.0) ? (d+D(0.5)):(d-D(0.5))); }
-template <class D> inline unsigned int float2uint(D d) { return  unsigned int(d>=0.0? (d+0.5):(d-0.5)); }
+
+// template <class D> inline unsigned int float2uint(D d) { return  unsigned int(d>=0.0? (d+0.5):(d-0.5)); } // VS
+// @GW error: expected primary-expression before 'unsigned'; заменяем на uint32 - то же самое!
+template <class D> inline uint32 float2uint(D d) { return uint32(d>=0.0? (d+0.5):(d-0.5)); } // @GW
+
 // умножение любого на float
 template <class X, class D> inline void xmulf(X &x, D d) { x = X(x*d); }
 
@@ -190,7 +194,7 @@ template <class T> string object_as_text_string(const T &obj)
   const uint8 *objbyte = reinterpret_cast <const uint8 *> (&obj);
 //  const uint8 *objbyte = (const uint8 *) &obj;
   ostringstream out;
-  size_t nbytes = sizeof T;
+  size_t nbytes = sizeof(T);
   for (size_t i = 0; i < nbytes; ++i)
   {
     out << "byte";

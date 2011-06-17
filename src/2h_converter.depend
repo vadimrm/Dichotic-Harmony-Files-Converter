@@ -1,0 +1,345 @@
+# depslib dependency file v1.0
+1298366398 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_advancedsequencer.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/advancedsequencer.h"
+
+1298366400 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\world.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<string>
+	<vector>
+	<algorithm>
+	<iostream>
+	<sstream>
+	"jdksmidi/utils.h"
+
+1298289690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\utils.h
+	"jdksmidi/multitrack.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\multitrack.h
+	"jdksmidi/track.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\track.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+
+1298366399 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\midi.h
+	"jdksmidi/world.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\msg.h
+	"jdksmidi/midi.h"
+	"jdksmidi/tempo.h"
+	"jdksmidi/sysex.h"
+
+1291290733 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\tempo.h
+	"jdksmidi/midi.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\sysex.h
+	"jdksmidi/midi.h"
+
+1291711724 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\advancedsequencer.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/multitrack.h"
+	"jdksmidi/filereadmultitrack.h"
+	"jdksmidi/sequencer.h"
+	"jdksmidi/manager.h"
+	"jdksmidi/driver.h"
+	"jdksmidi/driverdump.h"
+	<string>
+	<vector>
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\filereadmultitrack.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/file.h"
+	"jdksmidi/fileread.h"
+	"jdksmidi/multitrack.h"
+
+1298366398 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\file.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/tempo.h"
+
+1298366689 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\fileread.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/file.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\sequencer.h
+	"jdksmidi/track.h"
+	"jdksmidi/multitrack.h"
+	"jdksmidi/tempo.h"
+	"jdksmidi/matrix.h"
+	"jdksmidi/process.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\matrix.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\process.h
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\manager.h
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/driver.h"
+	"jdksmidi/sequencer.h"
+	"jdksmidi/tick.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\driver.h
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/matrix.h"
+	"jdksmidi/process.h"
+	"jdksmidi/queue.h"
+	"jdksmidi/tick.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\queue.h
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\tick.h
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\driverdump.h
+	"jdksmidi/driver.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_driver.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/driver.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_driverdump.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/driverdump.h"
+
+1298366398 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_driverwin32.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/driverwin32.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\driverwin32.h
+	"jdksmidi/driver.h"
+	"jdksmidi/sequencer.h"
+	"windows.h"
+	"mmsystem.h"
+
+1298366398 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_edittrack.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/edittrack.h"
+	"world.h"
+	<ETrack.hh>
+	<MMatrix.hh>
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\edittrack.h
+	"jdksmidi/track.h"
+	"jdksmidi/matrix.h"
+	"jdksmidi/process.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_file.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/file.h"
+
+1307437869 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_fileread.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/fileread.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_filereadmultitrack.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/filereadmultitrack.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_fileshow.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/fileshow.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\fileshow.h
+	"jdksmidi/fileread.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_filewrite.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/filewrite.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\filewrite.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/file.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_filewritemultitrack.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/filewritemultitrack.h"
+
+1298366690 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\filewritemultitrack.h
+	"jdksmidi/filewrite.h"
+	"jdksmidi/multitrack.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_keysig.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/keysig.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\keysig.h
+	"jdksmidi/midi.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_manager.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/manager.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_matrix.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/matrix.h"
+
+1298366399 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_midi.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/midi.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_msg.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/sysex.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/file.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_multitrack.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/multitrack.h"
+
+1298366399 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_parser.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/parser.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\parser.h
+	"jdksmidi/midi.h"
+	"jdksmidi/msg.h"
+	"jdksmidi/sysex.h"
+
+1298366399 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_process.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/process.h"
+
+1298366399 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_queue.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/queue.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_sequencer.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/sequencer.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_showcontrol.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/showcontrol.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\showcontrol.h
+	"jdksmidi/sysex.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_showcontrolhandler.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/showcontrolhandler.h"
+
+1290608006 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\showcontrolhandler.h
+	"jdksmidi/showcontrol.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_smpte.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/smpte.h"
+
+1298366399 k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi\smpte.h
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_sysex.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/sysex.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_tempo.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/tempo.h"
+
+1290608006 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_tick.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/tick.h"
+
+1298366690 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_track.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/track.h"
+
+1298544948 source:k:\t_my_work\z_jdksmidi\libjdksmidi\include\jdksmidi_utils.cpp
+	"jdksmidi/world.h"
+	"jdksmidi/utils.h"
+	"jdksmidi/sequencer.h"
+	"jdksmidi/filereadmultitrack.h"
+	"jdksmidi/filewritemultitrack.h"
+
+1307712866 source:k:\t_my_work\z_jdksmidi\z_2h_converter\2h_converter.cpp
+	"stdafx.h"
+
+1308230334 k:\t_my_work\z_jdksmidi\z_2h_converter\stdafx.h
+	"../libjdksmidi/include/jdksmidi/world.h"
+	"../libjdksmidi/include/jdksmidi/track.h"
+	"../libjdksmidi/include/jdksmidi/multitrack.h"
+	"../libjdksmidi/include/jdksmidi/filereadmultitrack.h"
+	"../libjdksmidi/include/jdksmidi/fileread.h"
+	"../libjdksmidi/include/jdksmidi/fileshow.h"
+	"../libjdksmidi/include/jdksmidi/filewritemultitrack.h"
+	"../libjdksmidi/include/jdksmidi/sequencer.h"
+	<windows.h>
+	<mmsystem.h>
+	<stdio.h>
+	<math.h>
+	<time.h>
+	<float.h>
+	<stdio.h>
+	<string>
+	<fstream>
+	<sstream>
+	<iostream>
+	<iomanip>
+	"unicode.h"
+	"tools.h"
+	"random.h"
+	"ar.h"
+	"files.h"
+	"win_tools.h"
+	"daccords.h"
+	"amain.h"
+
+1308224672 k:\t_my_work\z_jdksmidi\z_2h_converter\unicode.h
+
+1308039919 k:\t_my_work\z_jdksmidi\z_2h_converter\tools.h
+
+1307606279 k:\t_my_work\z_jdksmidi\z_2h_converter\random.h
+
+1308136310 k:\t_my_work\z_jdksmidi\z_2h_converter\ar.h
+
+1308043632 k:\t_my_work\z_jdksmidi\z_2h_converter\files.h
+	<share.h>
+
+1301045726 k:\t_my_work\z_jdksmidi\z_2h_converter\win_tools.h
+
+1308212809 k:\t_my_work\z_jdksmidi\z_2h_converter\daccords.h
+
+1307622554 k:\t_my_work\z_jdksmidi\z_2h_converter\2h_converter.h
+
+1308043754 source:k:\t_my_work\z_jdksmidi\z_2h_converter\daccords.cpp
+	"stdafx.h"
+
+1307621983 source:k:\t_my_work\z_jdksmidi\z_2h_converter\files.cpp
+	"stdafx.h"
+
+1285678760 source:k:\t_my_work\z_jdksmidi\z_2h_converter\random.cpp
+	"stdafx.h"
+
+1307625863 source:k:\t_my_work\z_jdksmidi\z_2h_converter\unicode.cpp
+	"stdafx.h"
+
+1303980959 source:k:\t_my_work\z_jdksmidi\z_2h_converter\win_tools.cpp
+	"stdafx.h"
+
+1308226948 k:\t_my_work\z_jdksmidi\z_2h_converter\main.h
+
+1308224391 source:k:\t_my_work\z_jdksmidi\z_2h_converter\main.cpp
+	"stdafx.h"
+
+1308226948 k:\t_my_work\z_jdksmidi\z_2h_converter\amain.h
+

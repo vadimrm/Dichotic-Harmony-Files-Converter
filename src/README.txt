@@ -1,16 +1,18 @@
 ﻿Dichotic Harmony Files Converter
 Copyright (c) 2010 Vadim Madgazin
-Версия 1.10 от  7 июня 2011 г.
+Версия 1.21 от 17 июня 2011 г.
 
 Консольное win32 приложение для взаимной конвертации .daccords и .mid файлов,
 а также для их дополнительной обработки - удаления начальной паузы, обрезания
 и т.п. - см. ниже параметры строки запуска.
 
-Midi input (first default par):         "2h_converter.exe  INFILE.mid"
+Usage for midi input:  "2h_converter.exe  INFILE.mid"
 
-or Daccords input (second default par): "2h_converter.exe  INFILE[.daccords]"
+Usage for daccords input:  "2h_converter.exe  INFILE[.daccords]"
 
-optional parameters, their default(s) ([first];[second]) and range min/max:
+Usage for music generator output:  "2h_converter.exe  GEN"
+
+optional parameters, their defaults for ([midi];[daccords]) and range min/max:
 
 -col    (0;  )  collapse_midi_tracks 0/1 свернуть все midi треки в один трек
 -colex  (0;  )  collapse_and_expand_midi_tracks 0/1 свернуть и развернуть
@@ -27,10 +29,13 @@ optional parameters, their default(s) ([first];[second]) and range min/max:
 -acomm  (1; 1)  add_accord_comment text 0/2 формат комментария аккорда
 -head   ( ; 0)  add_daccords_header text as seq.specific 0/1 добавлять хедер
 
-Example:
+-ncol  (0)  notes color for music GEN:  0/1
+-m     (7)  M for music GEN:  M <= 10
+-n     (7)  N for music GEN:  N <= M
+-k     (2)  K for music GEN:  2 <= K < N
+-seed  (0)  random seed for music GEN:  -2^31...+2^31
 
-"2h_converter.exe INFILE.mid -clip 60 -pause 0"
-
+Example:  "2h_converter.exe INFILE.mid -clip 60 -pause 0"
 
 =================================================================================
 

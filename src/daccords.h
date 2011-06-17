@@ -19,7 +19,7 @@ struct DichoticNote // одна дихотическая нота
   int spare1; // "запасное число 1", используется для локальных нужд кода...
 };
 
-struct DichoticAccord // структура дихотического аккорда 
+struct DichoticAccord // структура дихотического аккорда
 {
   // макс. число голосов аккорда, которые поддерживаются данной версией программы
   static const int MAX_ACC_VOICES = 256; // аппаратный максимум = 128 для XG level 3
@@ -65,17 +65,22 @@ class DaccordsFile
 {
   static const int ADDS = 4; // служебные строки в начале файла (формат, комментарий, общие параметры, аббревиатуры)
   wstring header; // сырой заголовок файла (это ADDS суб-строк, разделённых между собой UNI_CRLF)
+
   ChainHeader ch; // декодированный заголовок файла
   wstring comment; // комментарий из заголовка файла
   Ar <DichoticAccord> accords; // массив аккордов из файла
   int errs; // ошибки при чтении daccords файла: если 0 то всё в порядке!
-  int accords_number; // количество аккордов в массиве accords при конвертации из midi
+  int accords_number; // количество аккордов с музыкой в массиве accords
 
   // функции добавления midi аккорда и паузы в daccords массив
   void write_accord(int dtms, vector <MIDITimedBigMessage> &accord_events, vector <int> &instr, vector <double> &pan);
 public:
+  static const wchar_t *daccords_header; // первое слово в начале файла (заголовок)
+  static const int dflt_version = 0; // версия формата файла, который воспринимает код
+
   DaccordsFile(const wchar_t *file = 0) // если есть - читаем .daccords файл
   {
+    accords_number = 0;
     errs = 0;
     if (file != 0) Read(file);
   }
@@ -105,13 +110,12 @@ public:
   ChainHeader chain_header() const { return ch; }
   int errors() const { return errs; }
 
-  static const wchar_t *daccords_header; // первое слово в начале файла (заголовок)
-  static const int dflt_version = 0; // версия формата файла, который воспринимает код
-
   // упаковка содержимого файла аккордов df в стрим-строку ws
   // pan_precision - число дес. знаков после запятой для вывода панорамы, если 0 то даже точки нет!
   friend void ConvertAccordsToString(const DaccordsFile &df, wostringstream &ws, int pan_precision,
                                      int add_accord_number, int add_accord_comment);
+  friend void MusicGenerator();
+
 };
 
 

@@ -1,42 +1,24 @@
 ﻿#include "stdafx.h"
 const wchar_t* ProgramTitle = L"Dichotic Harmony Files Converter";
 const wchar_t* ProgramCopyright = L"Copyright (c) 2010 Vadim Madgazin";
-const wchar_t* VER_NUM = L"1.10"; // версия от 7 июня 2011 г.
+const wchar_t* VER_NUM = L"1.21"; // версия от 17 июня 2011 г.
 /*
   =Сделано:
-  -работает с улучшенной libjdksmidi версии 14!
-  -чуток улучшен код jdksmidi_fileread.cpp - см. текст Stephan.Huebler@tu-dresden.de
-  -последние версии универсальных файлов скопированы из проекта 2h_accords_generator
-  -установлена версия компилера с профайлером - Visual Studio 2005 Team Suite
-  -включение и выключение профайлера: Linker / Advanced / Profile 
-   но включать лучше так: Tools / Performance Tools / Performance Wizard далее всё просто
-   потом на вкладке (в окне) Performance Explorer правой кнопкой на проекте выбираем Launch
-   когда профиль готов - смотрим на "нижней" вкладке Functions время Elapsed Inclusive Time
-   в миллисекундах - какая функция дольше всего выполнялась...
-   чтобы посмотреть старый профайл ещё раз надо "открыть" .psess файл в File / Open
-  -для больших файлов значительно увеличена скорость преобразования daccords -> midi:
-   профайлер определил, что более 80% времени уходило на операции с wstring и особенно
-   с wstring2 строками в функции DaccordsFile::Read(const wchar_t *file), в частности
-   на конструирование, копирование и вывод (wstring2 >> в int, double и др. переменные)...
-   поэтому самый медленный wstring код был заменён на wchar_t код, а затем везде в этой
-   функции вместо wstring2 были использованы wistringstream и wstring, в результате чего
-   скорость увеличилась ещё в 2 раза!
-  -рекомендации на будущее для критичных по скорости участков кода:
-   не использовать wstring2 функции, которые появляются обычно для удобства применения
-   операторов ввода/вывода из/в простые переменные >> и <<
-   не использовать код с многократным перевыделением памяти для wstring
+  -добавлена функция MusicGenerator() - случайный генератор (M,N,K)-фонической музыки:
+   см. тетрадь Идеи-7 от 18 ноября 2010 г. запись номер I-3
+  -запуск с первым параметром GEN приводит к генерации мелодии в daccords файл!
+  -неплохая мелодия на белых клавишах: GEN -m 7 -n 5 [-seed ...]
+  -работает с libjdksmidi версии 15
 
   =Надо:
-  -коммит libjdksmidi
-  -новый проект 2h_converter на Github
+  -хелп проапдейтить!
 
   =Следующая версия:
-  -добавить генератор мелодий: см. тетр. Идеи-7 от 18 ноября 2010 г.
-
-  -опция вариатора midi инструментов: Идеи-7, запись от 31 дек. 2010 г.
-
+  -можно попробовать переделать одноголосную музыку в многоголосье - брать аккорды из A >= 2
+   подряд идущих нот генератора со сдвигом первой ноты следующего аккорда на B нот от первой
+   ноты предыдущего аккорда, где 1 <= B <= A; например - трёхголосье: A = 3, B = 1...3
   -кросс-платформ. вариант: без мессаг-бокса, только станд. вывод!
-  -версия на GCC - minGW
+  -опция вариатора midi инструментов: Идеи-7, запись от 31 дек. 2010 г.
 
   -рекомендации для 2-го формата daccords файлов:
    в заголовок ввести данные, обычно присутствующие в midi-партитурах (Сибелиус и др.):
@@ -87,15 +69,13 @@ const wchar_t* VER_NUM = L"1.10"; // версия от 7 июня 2011 г.
   -упаковать все параметры вызова в одну структуру, которую и передавать в функции...
   -добавить возможность записывать текстовые события как Unicode строки, в том числе для
    мета-события META_SEQUENCER_SPECIFIC, и для последнего добавить manufacturer's ID
-  -поместить все файлы проекта в Git, включая бинарный .sln но не .exe!
-  -в будущем лучше компилировать итоговый вариант при помощи GCC/MinGW!
 
   =Важно:
   -рекомендации на будущее для критичных по скорости участков кода:
    не использовать wstring2 функции, которые появляются обычно для удобства применения
    операторов ввода/вывода из/в простые переменные >> и <<
    не использовать код с многократным перевыделением памяти для wstring
-  -включение и выключение профайлера: Linker / Advanced / Profile 
+  -включение и выключение профайлера: Linker / Advanced / Profile
    но включать лучше так: Tools / Performance Tools / Performance Wizard далее всё просто
    потом на вкладке (в окне) Performance Explorer правой кнопкой на проекте выбираем Launch
    когда профиль готов - смотрим на "нижней" вкладке Functions время Elapsed Inclusive Time
@@ -116,9 +96,26 @@ const wchar_t* VER_NUM = L"1.10"; // версия от 7 июня 2011 г.
   -баг в Сибелиусе вер. 4: midi файлы с небольшим числом нот (примерно <= 5) не открываются!
 */
 
+int music_gen = 0; // !0 = режим генерации (M,N,K)-фонической музыки
+int notes_color = 0; // 0=чёрные клавиши рояля; 1=белые
+MusGen mg =
+{
+  {  1,3,  6,8,10,    13, 15, 18,20,22 }, // набор номеров нот музыки - чёрные клавиши рояля
+  { 0,2,4,5,7,9, 11,12, 14, 16 }, // --//-- белые клавиши рояля
+  // 10 >= M >= N > K >= 2; при K > 2 музыка слишком однообразна...
+           5,   4,  2, // это неплохо для чёрных клавиш
+  //       7,   5,  2, // а это - для белых...
+  // индексы первых N нот музыки: от них тоже кое-что зависит, поэтому лучше бы читать их из файла...
+  { 0,1,2,3,4,5,6,7,8,9 },
+    0, // seed случайного генератора - можно менять из параметров вызова!
+   50, // сдвиг нот: нота номер 0 становится этой миди нотой
+  300, // длина генерируемой музыки в нотах
+  333, // длительность одной ноты в мсек
+};
+
 bool TEST = 0; // 1 = режим для профилирования кода на тестовом файле
-int testmode = 1;
-wstring testfilew = L"crash_converter.mid.daccords";
+int testmode = 0; // converter_mode для теста
+wstring testfilew = L"test.mid";
 
 int converter_mode = 0; // режим работы: 0 input midi файл, 1 input daccords файл
 static int& MODE = converter_mode;
@@ -159,11 +156,12 @@ int WINAPI MyMsgBoxFun(HWND, LPCWSTR text, LPCWSTR, UINT)
   return MessageBoxW( MboxHWND, text, MboxTitle, MB_OK ); // модальный мессаг-бокс над окном MboxHWND
 }
 
-void wmain(int argc, wchar_t *argv[])
+// void wmain(int argc, wchar_t *argv[]) // VS (Visual Studio)
+int main(int argc, char *argv[]) // @GW (MinGW) не может сделать широкую версию main!
 {
   // получаем хендл и дескриптор окна консоли
   HWND chwnd = GetConsoleWindow();
-  HINSTANCE chinst = GetModuleHandle(0);
+  // HINSTANCE chinst = GetModuleHandle(0);
 
   MboxHWND = chwnd; // хендл родительского окна для Mbox() - окон
   MboxTitle = ProgramTitle; // их титульная строка
@@ -172,7 +170,7 @@ void wmain(int argc, wchar_t *argv[])
 
   wstring2 bigtitle(ProgramTitle);
   bigtitle += L" ver ";
-  bigtitle << VER_NUM << "\n" << ProgramCopyright;
+  bigtitle << VER_NUM << L"\n" << ProgramCopyright;
 
   if (TEST) // тестовый режим
   {
@@ -185,11 +183,17 @@ void wmain(int argc, wchar_t *argv[])
     if ( !ParseArgs(argc, argv) )
     {
       PrintHelp(bigtitle);
-      return;
+      return 0;
     }
   }
 
   wcout << endl << bigtitle << endl << endl;
+
+  if ( music_gen )
+  {
+    MusicGenerator();
+    return 0;
+  }
 
   if ( converter_mode == 0 ) // input midi
   {
@@ -199,7 +203,7 @@ void wmain(int argc, wchar_t *argv[])
     if ( !mfile.Read(infilew) )
     {
       Mbox(L"Error reading or processing midi file", infilew);
-      return;
+      return 0;
     }
 
     bool save_midi = false;
@@ -217,7 +221,7 @@ void wmain(int argc, wchar_t *argv[])
       wstring filew = infilew + L".txt";
       // сохраняем текст в файл
       write_bin(filew.c_str(), text.c_str(), text.length(), true);
-      return;
+      return 0;
     }
 
     if ( !use_start_pause[MODE] ) // первым делом удаляем начальную паузу музыки
@@ -257,7 +261,7 @@ void wmain(int argc, wchar_t *argv[])
     if (!res)
     {
       Mbox(L"Error in MidiToDaccords() converter!");
-      return;
+      return 0;
     }
 
     // делаем транспозицию = минимальный номер мелодической ноты
@@ -285,7 +289,7 @@ void wmain(int argc, wchar_t *argv[])
     {
       Mbox(L"Error reading or processing daccords file", infilew,
            L"\nError code", dfile.errors() );
-      return;
+      return 0;
     }
     // Mbox( dfile.header_comment(), L"Число аккордов в файле:", dfile.arr_accords().elements() );
 
@@ -299,7 +303,7 @@ void wmain(int argc, wchar_t *argv[])
     if (!res)
     {
       Mbox(L"Error in DaccordsToMidi() converter!");
-      return;
+      return 0;
     }
 
     // write the output midi file
@@ -316,14 +320,16 @@ void wmain(int argc, wchar_t *argv[])
       cout << "Number of midi tracks is " << midi_tracks_number << endl;
     }
   }
+
+  return 0;
 }
 
-bool ParseArgs(int argc, wchar_t *argv[])
+bool ParseArgs(int argc, char *argv[])
 {
   if ( argc < 2 ) return false;
   // else argc >= 2
 
-  infilew = argv[1]; // 2-й аргумент всегда имя входного файла без ключа!
+  infilew = argv[1]; // 2-й аргумент всегда имя входного файла или GEN
   string infile = infilew;
 
   // определяем расширение файла
@@ -341,6 +347,8 @@ bool ParseArgs(int argc, wchar_t *argv[])
     converter_mode = 1; // input from daccords file
   }
 
+  if ( infile == "GEN" ) music_gen = 1;
+
   if ( argc < 3 ) return true;
   // else argc >= 3
 
@@ -352,41 +360,34 @@ bool ParseArgs(int argc, wchar_t *argv[])
     double dval = 0.;
     if ( (i+1) < argc )
     {
-      ival = _wtoi( argv[i+1] );
-      dval = _wtof( argv[i+1] );
+      ival = atoi( argv[i+1] );
+      dval = atof( argv[i+1] );
     }
-    wstring key = argv[i];
+    string key = argv[i];
 
-    if ( key == L"-col" ) collapse_midi_tracks[MODE] = ival;
-    else
-    if ( key == L"-colex" ) collapse_and_expand_midi_tracks[MODE] = ival;
-    else
-    if ( key == L"-pause" ) use_start_pause[MODE] = ival;
-    else
-    if ( key == L"-clip" )  clip_music_time[MODE] = max(0., dval);
-    else
-    if ( key == L"-text" )  midi_as_text[MODE] = ival;
-    else
-    if ( key == L"-pan" )   panorame_precision[MODE] = max(0, ival);
-    else
-    if ( key == L"-perc" )  use_percussion[MODE] = ival;
-    else
-    if ( key == L"-trans" ) optimize_transposition[MODE] = ival;
-    else
-    if ( key == L"-tlag" )  accord_time_lag[MODE] = max(0., dval);
-    else
-    if ( key == L"-tick" )  tick_time_msec[MODE] = max(0.01, dval);
-    else
-    if ( key == L"-rep" )   repeat_upto_number[MODE] = (int) min( dval, 1e6 );
-    else
-    if ( key == L"-anum" )  add_accord_number[MODE] = ival;
-    else
-    if ( key == L"-acomm" ) add_accord_comment[MODE] = ival;
-    else
-    if ( key == L"-head" )  add_daccords_header[MODE] = ival;
+         if ( key == "-col" ) collapse_midi_tracks[MODE] = ival;
+    else if ( key == "-colex" ) collapse_and_expand_midi_tracks[MODE] = ival;
+    else if ( key == "-pause" ) use_start_pause[MODE] = ival;
+    else if ( key == "-clip" )  clip_music_time[MODE] = max(0., dval);
+    else if ( key == "-text" )  midi_as_text[MODE] = ival;
+    else if ( key == "-pan" )   panorame_precision[MODE] = max(0, ival);
+    else if ( key == "-perc" )  use_percussion[MODE] = ival;
+    else if ( key == "-trans" ) optimize_transposition[MODE] = ival;
+    else if ( key == "-tlag" )  accord_time_lag[MODE] = max(0., dval);
+    else if ( key == "-tick" )  tick_time_msec[MODE] = max(0.01, dval);
+    else if ( key == "-rep" )   repeat_upto_number[MODE] = (int) min( dval, 1e6 );
+    else if ( key == "-anum" )  add_accord_number[MODE] = ival;
+    else if ( key == "-acomm" ) add_accord_comment[MODE] = ival;
+    else if ( key == "-head" )  add_daccords_header[MODE] = ival;
+
+    else if ( key == "-ncol" )  notes_color = ival;
+    else if ( key == "-m" )  mg.m = ival;
+    else if ( key == "-n" )  mg.n = ival;
+    else if ( key == "-k" )  mg.k = ival;
+    else if ( key == "-seed" )  mg.seed = ival;
     else
     {
-      wcout << L"\a" << endl << L"Warning: ignore unknown key \"" << key << L"\"!" << endl;
+      cout << "\a" << endl << "Warning: ignore unknown key \"" << key << "\"!" << endl;
     }
   }
 
@@ -397,12 +398,13 @@ void PrintHelp(const wchar_t *title)
 {
   Mbox(
       title,
-      L"\n\nMidi input (first default par):"
-      L"\n2h_converter.exe  INFILE.mid"
-      L"\nor"
-      L"\nDaccords input (second default par):"
-      L"\n2h_converter.exe  INFILE[.daccords]"
-      L"\n\noptional parameters, their default(s) ([first];[second]) and range min/max:\n"
+      L"\n\nUsage for midi input:  2h_converter.exe  INFILE.mid"
+
+      L"\n\nUsage for daccords input:  2h_converter.exe  INFILE[.daccords]"
+
+      L"\n\nUsage for music generator output:  2h_converter.exe  GEN"
+
+      L"\n\noptional parameters, their defaults for ([midi];[daccords]) and range min/max:\n"
       L"\n-col    (0;  )  collapse_midi_tracks 0/1"
       L"\n-colex  (0;  )  collapse_and_expand_midi_tracks 0/1"
       L"\n-pause  (1; 1)  use_start_pause of music 0/1"
@@ -417,9 +419,144 @@ void PrintHelp(const wchar_t *title)
       L"\n-anum   (1; 1)  add_accord_number text  0/1"
       L"\n-acomm  (1; 1)  add_accord_comment text  0/2"
       L"\n-head   ( ; 0)  add_daccords_header text as seq.specific  0/1"
-      L"\n\nExample:"
-      L"\n2h_converter.exe INFILE.mid -clip 60 -pause 0",
+
+    L"\n\n-ncol (0) notes color for music GEN:  0/1"
+      L"\n-m    (5) M for music GEN:  M <= 10"
+      L"\n-n    (4) N for music GEN:  N <= M"
+      L"\n-k    (2) K for music GEN:  2 <= K < N"
+      L"\n-seed (0) random seed for music GEN:  -+2^31"
+
+      L"\n\nExample: 2h_converter.exe INFILE.mid -clip 60 -pause 0",
       UNI_SPACE
       );
+}
+
+void MusicGenerator()
+{
+  // корректируем параметры генератора
+  mg.m = min(mg.m, MAXM);
+  mg.n = min(mg.n, mg.m);
+  mg.k = min(mg.k, mg.n-1);
+  if (mg.k < 2) // ошибка данных
+  {
+    Mbox("Error in M, N, K =", mg.m, mg.n, mg.k, UNI_SPACE);
+    return;
+  }
+
+  // создаём данные для daccords файла
+  DaccordsFile df;
+
+  df.comment = L"Music GEN";
+  df.ch.chain_speed = 1.0;
+  df.ch.dont_change_gm_instrument = 1;
+  df.ch.timbre_number = 1;
+  df.ch.transposition = mg.transposition;
+
+  // выделяем память под аккорды
+  if ( !df.accords.renew(mg.notes_num) ) return; // ошибка
+
+  DichoticAccord acc; // "стандартный" аккорд
+  acc.timbre = df.ch.timbre_number;
+  acc.temp = 1000;
+  acc.duration = mg.duration_msec;
+  acc.voices_number = 1;
+  acc.clear_comment();
+  acc.volume = 100;
+  acc.dn[0].pause = 0;
+  acc.dn[0].note = 0;
+  acc.dn[0].pan = 0;
+
+/*
+  -(M,N,K)-фония: см. тетр. Идеи-7 от 18 ноября 2010 г. запись I-3)
+   множество разрешённых нот музыки состоит из M разных нот,
+   ноты генерятся случайным образом или путём полного перебора вариантов,
+   на любом отрезке музыки из N нот ровно K нот должны быть одинаковыми,
+   остальные (N-K) нот должны быть разными, отличными и друг от друга и от тех K нот...
+   10 >= M >= N > K >= 2; при K > 2 музыка слишком однообразна...
+
+   алгоритм:
+   вводим первый N-отрезок вручную (он может быть произвольным!) - см. MusGen::ind[]
+   сдвигаемся на 1 ноту, генерим случайную новую ноту и проверяем новый N-отрезок:
+   количество разных нот должно быть равно N-K+1, а все остальные K-1 нот должны быть одинаковы
+   и равны какой-то одной (любой) ноте из тех разных... если это не так - генерим другую ноту!
+
+   замечание: массив разрешённых нот MusGen::notes0/1[] может иметь повторы нот, которые просто будут
+   увеличивать вероятность выпадения этих нот в музыке - т.о. можно подстроиться под определённую
+   музыку - напр. как у известных произведений!
+*/
+
+  int M = mg.m, N = mg.n, K = mg.k;
+  int maxval = M-1; // random number from 0 to maxval, include maxval!
+  Random rg;
+  rg.set_seed( mg.seed );
+  // выбираем чёрные или белые клавиши...
+  int *notes = notes_color==0? mg.notes0:mg.notes1;
+
+  for (int n = 0; n < mg.notes_num; ++n)
+  {
+    ++df.accords_number;
+    DichoticAccord &ac = df.accords[n];
+    ac = acc;
+
+    if (n < N) // копируем первый N-отрезок из фиксированных данных
+    {
+      ac.dn[0].note = notes[ mg.ind[n] ];
+      continue;
+    }
+
+    int loop = 0;
+back:
+    if (++loop > 1000) // защита от зацикливания
+    {
+      Mbox("Error in music GEN, infinite loop!");
+      break;
+    }
+
+    // случайный генератор индекса ноты 0...(M-1)
+    int index = rg.get_rand_ex( maxval );
+    ac.dn[0].note = notes[index];
+
+    // проверяем новый N-отрезок: от df.accords[n-N+1] до df.accords[n]
+    // количество разных нот должно быть равно N-K+1, а все остальные K-1 нот должны быть одинаковы
+    // и равны какой-то одной (любой) ноте из тех разных... если это не так - генерим другую ноту!
+    vector<int> nmus(N); // N-отрезок музыки
+    for (int i = 0; i < N; ++i) nmus[i] = df.accords[i+n-N+1].dn[0].note;
+    // анализ делать намного легче если nmus отсортировать в порядке возрастания (или убывания) нот
+    sort( nmus.begin(), nmus.end() );
+    int eqnum = 0; // количество одинаковых нот
+    int eqnote = 0; // сама "одинаковая" нота
+    for (int i = 1; i < N; ++i)
+    {
+      int act = nmus[i]; // текущая нота
+      int prev = nmus[i-1]; // предыдущая нота
+      if (act != prev) continue;
+      // else ноты совпадают
+      if (eqnum == 0) // первое совпадение
+      {
+        eqnote = act; // запоминаем первую совпавшую ноту
+        eqnum = 2; // 2 одинаковых ноты - это всегда нормально, т.к. K >= 2
+        continue;
+      }
+      // else не первое совпадение
+      // все совпадающие ноты должны быть равны друг другу, а их число <= K
+      if (eqnote != act || ++eqnum > K) goto back; // иначе делаем новую ноту ещё раз
+    }
+    // одинаковых нот на всём N-отрезке должно быть ровно K
+    if (eqnum != K) goto back; // иначе делаем новую ноту ещё раз
+  }
+
+  // имя выходного файла - делаем из параметров генератора
+  wstring2 filew;
+  filew << "col" << notes_color << "m" << mg.m << "n" << mg.n << "k" << mg.k << "seed" << mg.seed;
+  filew += ".daccords";
+  if ( !df.Write(filew, 0, 1, 0) )
+  {
+    Mbox(L"Error writing daccords file", filew);
+  }
+  else
+  {
+    wcout << L"OK writing file  " << filew << endl;
+    cout << "Number of accords is " << df.get_accords_number() << endl;
+  }
 }
 

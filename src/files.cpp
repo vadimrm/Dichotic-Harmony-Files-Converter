@@ -7,7 +7,7 @@ bool read_bin_ex(const wchar_t *file, void *buffer, int &maxbuflen)
 {
   if ( maxbuflen <= 0 ) return false;
 
-  FILEopen df( file, "rb" );
+  FILEopen df( file, L"rb" );
   if ( !df ) return false;
 
   maxbuflen = (int)fread( buffer, 1, maxbuflen, df );
@@ -30,7 +30,7 @@ int read_bin_offset(const wchar_t *file, void *buffer, int maxbuflen, int offset
 {
   if ( maxbuflen <= 0 || offset < 0 ) return 0;
 
-  FILEopen df(file, "rb");
+  FILEopen df(file, L"rb");
   if ( !df ) return 0;
 
   if ( fseek(df, offset, SEEK_SET) != 0 ) return 0;
@@ -50,7 +50,7 @@ bool write_bin_offset(const wchar_t *file, const void *buffer, int buflen, int o
 {
   if ( buflen < 0 || offset < 0 ) return false;
 
-  FILEopen df( file, "r+b" ); // w+b работает не так как надо!
+  FILEopen df( file, L"r+b" ); // w+b работает не так как надо!
   if ( !df ) return false;
 
   if ( fseek(df, offset, SEEK_SET) != 0 ) return false;
@@ -64,7 +64,7 @@ bool write_bin_append(const wchar_t *file, const void *buffer, int buflen)
 {
   if ( buflen < 0 ) return false;
 
-  FILEopen df( file, "a+b" );
+  FILEopen df( file, L"a+b" );
   if ( !df ) return false;
 
   int wnum = (int)fwrite( buffer, 1, buflen, df );
@@ -76,7 +76,7 @@ bool write_bin_append2(const wchar_t *file, const void *buffer, int buflen)
 {
   if ( buflen < 0 ) return false;
 
-  FILEopen2 df(file, "a+b", _SH_DENYNO); // разрешаем коллективный доступ к файлу на чтение/запись
+  FILEopen2 df(file, L"a+b", _SH_DENYNO); // разрешаем коллективный доступ к файлу на чтение/запись
   if ( !df ) return false;
 
   int wnum = (int)fwrite( buffer, 1, buflen, df );
@@ -98,7 +98,7 @@ bool write_bin(const wchar_t *file, const void *buffer, int buflen, bool create)
 
 int get_file_length(const wchar_t *file)
 {
-  FILEopen df(file, "rb");
+  FILEopen df(file, L"rb");
   if ( !df ) return 0;
 
   if ( fseek(df, 0, SEEK_END) != 0 ) return 0;
@@ -109,7 +109,7 @@ int get_file_length(const wchar_t *file)
 
 bool file_exist(const wchar_t *file)
 {
-  FILEopen df(file, "rb");
+  FILEopen df(file, L"rb");
   return df != 0;
 }
 
