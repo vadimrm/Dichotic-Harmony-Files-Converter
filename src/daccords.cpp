@@ -1,5 +1,6 @@
 ﻿
 #include "stdafx.h"
+#include "stdafx2.h"
 
 inline bool SetPan( MIDIMultiTrack *tracks, int track_num, MIDIClockTime ticks, int chan, double dpan )
 // dpan = -1 ... 0 ... +1 (лево, центр, право)
@@ -298,6 +299,30 @@ back:
   ch.transposition += minnote;
 }
 
+void DaccordsFile::SoloMelodyConverter()
+// отбрасываем все ноты кроме самой высокой - только в первом аккорде (постфактум-устранение бага)
+{
+  if (accords_number < 1) return;
+  DichoticAccord &acc = accords[0];
+  if (acc.voices_number <= 1) return;
+
+  int maxnote_num = MIN_INT;
+  int maxnote_ind = -1;
+  for (int n = 0; n < acc.voices_number; ++n )
+  {
+    if ( acc.dn[n].pause ) continue;
+    int note = acc.dn[n].note;
+    if (maxnote_num < note)
+    {
+      maxnote_num = note;
+      maxnote_ind = n;
+    }
+  }
+  // переносим максимальную ноту в 0-ю
+  if (maxnote_ind > 0) acc.dn[0] = acc.dn[maxnote_ind];
+  acc.voices_number = 1;
+}
+
 void DaccordsFile::write_accord(int dtms, vector <MIDITimedBigMessage> &accord_events,
                                 vector <int> &instrument, vector <double> &panorama)
 // выводим аккорд и стираем отработанные ненужные события
@@ -320,11 +345,18 @@ void DaccordsFile::write_accord(int dtms, vector <MIDITimedBigMessage> &accord_e
   int n = 0;
   int velsum = 0, velnum = 0, maxvel = 0;
 
-  // цикл формирования аккорда из всех нажатых нот от начала стека до маркера end
+  // цикл формирования аккорда из всех нажатых нот от начала стека до маркера end_of_accord (UserAppMarker)
+
+  // замечание: если нота нажата и отпущена до маркера endof_accord (например - нота нулевой длительности),
+  // то она должна быть проигнорирована, однако сейчас это не делается и длительность такой ноты становится
+  // равной длительности аккорда, что неверно... см. напр файл zero_dur_notes.mid - его первый аккорд будет
+  // трёхголосным, хотя он должен быть одноголосным... хотя аналогичный 3-й аккорд уже выводится верно! @@
+  // нота нулевой длительности это нонсенс, но длительность <=accord_time_lag возможна и тоже дасть ошибку
+  // однако эта ошибка будет только в первом аккорде, поэтому она исчезает если музыка начинается с паузы!
   for (int i = 0; i < size; ++i)
   {
     MIDITimedBigMessage &ev = accord_events[i];
-    if ( ev.IsUserAppMarker() ) // найден маркер end
+    if ( ev.IsUserAppMarker() ) // найден маркер end_of_accord
     {
       ev.SetNoOp(); // стираем маркер и выходим из цикла
       break;
@@ -509,12 +541,12 @@ bool DaccordsFile::MidiToDaccords(const MidiFile &mfile, int ignore_percussion, 
   accord_events.reserve(256); // сразу резервируем объём стека до 256 элементов
 
 
-  // время начала и конца (аккорда или паузы): первое собитие становится началом, все остальные которые
+  // время начала и конца (аккорда или паузы): первое событие становится началом, все остальные которые
   // близки к нему (в пределах accord_time_lag) считаются одновременными, первое далёкое от него событие
   // становится концом, все остальные близкие к нему считаются одновременными, первое далёкое от него
   // означает что промежуток (start_time, end_time) надо вывести и передвинуть start_time на end_time
   double start_time = 0., end_time = start_time;
-  bool start = true; // начальное состояние - события привязываются к start_time
+  bool start_state = true; // начальное состояние - события привязываются к start_time
 
   MIDISequencer seq(mt);
   seq.GoToZero(); // ставим время на начало мультитрека!
@@ -526,9 +558,9 @@ bool DaccordsFile::MidiToDaccords(const MidiFile &mfile, int ignore_percussion, 
   double srcall = 0., dstall = 0.;
 
   // событие-маркер "конца аккорда", после которого любые нажатия нот не будут выведены в текущем аккорде
-  // (они будут выведены в следующем акк.)
-  MIDITimedBigMessage end;
-  end.SetUserAppMarker();
+  // (они будут выведены в следующем аккорде)
+  MIDITimedBigMessage end_of_accord;
+  end_of_accord.SetUserAppMarker();
   bool ignore_percussion_notes = false; // true если было игнорировано нотное сообщение в канале ударных
 
   while ( seq.GetNextEvent( &ev_track, &ev ) )
@@ -576,8 +608,8 @@ bool DaccordsFile::MidiToDaccords(const MidiFile &mfile, int ignore_percussion, 
     }
     // else сброс всех нот в канале или индивидуальное нотное событие
 
-    // в начале нотные события привязываем к start_time (=0)
-    if (start)
+    // в самом начале нотные события привязываем к start_time (=0)
+    if (start_state)
     {
       double dt = event_time - start_time;
       if (dt <= accord_time_lag) // если событие в пределах допустимого от start_time
@@ -587,11 +619,11 @@ bool DaccordsFile::MidiToDaccords(const MidiFile &mfile, int ignore_percussion, 
       else // событие далеко: конец start фазы!
       {
         // переходим в режим привязки событий к end_time
-        accord_events.push_back( end ); // записываем в стек маркер "конца аккорда"
+        accord_events.push_back( end_of_accord ); // записываем в стек маркер "конца аккорда"
         accord_events.push_back( ev );  // записываем нотное событие в стек аккорда
         // start_time не меняем!
         end_time = event_time; // конец аккорда на этом далёком от начала событии
-        start = false;
+        start_state = false; // конец начальной фазы работы
       }
       continue;
     }
@@ -616,7 +648,7 @@ bool DaccordsFile::MidiToDaccords(const MidiFile &mfile, int ignore_percussion, 
       write_accord(idur, accord_events, instrument, panorama);
 
       // переходим к накоплению событий для следующего аккорда
-      accord_events.push_back( end ); // записываем в стек маркер "конца аккорда"
+      accord_events.push_back( end_of_accord ); // записываем в стек маркер "конца аккорда"
       accord_events.push_back( ev ); // записываем нотное событие в стек аккорда
       start_time = end_time; // начало нового аккорда = конец старого
       end_time = event_time; // конец аккорда на этом далёком от начала событии
@@ -934,7 +966,8 @@ noteon:   // нажимаем ноту и запоминаем её канал -
                 text << acc.comment; // без пробела
               }
 
-              tracks->GetTrack( chan_track[chan] )->PutTextEvent(time, META_LYRIC_TEXT, text);
+              if ( !text.empty() ) // пустой текст не пишем!
+                tracks->GetTrack( chan_track[chan] )->PutTextEvent(time, META_LYRIC_TEXT, text);
             }
           }
         }

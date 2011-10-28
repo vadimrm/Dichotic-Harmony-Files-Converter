@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Win32">
-				<Option output="K:\t_MY_WORK\z_jdksmidi\z_2h_converter\2h_converter_gwd" prefix_auto="1" extension_auto="1" />
+				<Option output="K:\t_MY_WORK\y_jdksmidi\z_2h_converter\2h_converter_gwd" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Debug Win32" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -28,7 +28,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release Win32">
-				<Option output="K:\t_MY_WORK\z_jdksmidi\z_2h_converter\2h_converter_gw" prefix_auto="1" extension_auto="1" />
+				<Option output="K:\t_MY_WORK\y_jdksmidi\z_2h_converter\2h_converter_gw" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Release Win32" />
 				<Option type="1" />
 				<Option compiler="gcc" />

@@ -1,5 +1,6 @@
 ﻿
 #include "stdafx.h"
+#include "stdafx2.h"
 
 // ==================== глобальные file-функции =======================
 
@@ -99,12 +100,12 @@ bool write_bin(const wchar_t *file, const void *buffer, int buflen, bool create)
 int get_file_length(const wchar_t *file)
 {
   FILEopen df(file, L"rb");
-  if ( !df ) return 0;
+  if ( !df ) return -1;
 
-  if ( fseek(df, 0, SEEK_END) != 0 ) return 0;
+  if ( fseek(df, 0, SEEK_END) != 0 ) return -1;
 
   int len = ftell(df); // len = -1 if error!
-  return len>0? len:0;
+  return len;
 }
 
 bool file_exist(const wchar_t *file)

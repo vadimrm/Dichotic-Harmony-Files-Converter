@@ -9,12 +9,12 @@
 const int FILE_STRLEN = MAX_PATH+64; // 260+64
 
 bool file_exist(const wchar_t *file);
-int  get_file_length(const wchar_t *file); // if error return 0!
-int  read_bin(const wchar_t *file, void *buffer, int maxbuflen);
+int get_file_length(const wchar_t *file); // if error return -1!
+int read_bin(const wchar_t *file, void *buffer, int maxbuflen);
 bool read_bin_ex(const wchar_t *file, void *buffer, int &maxbuflen);
 
 // читает кусок файла по текущему смещению, возврящает число прочитанных байт
-int  read_bin_offset(const wchar_t *file, void *buffer, int maxbuflen, int offset);
+int read_bin_offset(const wchar_t *file, void *buffer, int maxbuflen, int offset);
 
 // если create=1 - создает и пишет в файл, иначе файл уже должен существовать!
 bool write_bin(const wchar_t *file, const void *buffer, int buflen, bool create);
@@ -36,8 +36,8 @@ class FILEopen // простой "открыватель" файла с само
   FILE *pfile;
 public:
 // FILEopen(const wstring2 filename, const wstring2 mode) { _wfopen_s(&pfile, filename, mode); } // VS
-  // в @GW нет VS-функции _wfopen_s, заменяем на эквивалентную
-  FILEopen(const wstring2 filename, const wstring2 mode) { pfile = _wfopen(filename, mode); } // @GW
+  // в GW нет VS-функции _wfopen_s, заменяем на эквивалентную
+  FILEopen(const wstring2 filename, const wstring2 mode) { pfile = _wfopen(filename, mode); } // GW
 
   // деструктор закрывает файл, это можно сделать и до уничтожения объекта: (*this).~FILEopen();
   ~FILEopen() { if (pfile) fclose( pfile ); pfile = NULL; }
@@ -101,7 +101,7 @@ class BinFile
   Ar <uint8> buf; // массив байт - содержимое файла с диска
   int len; // длина файла - надо, т.к. размер массива Ar другой!
   wstring2 file; // имя файла из конструктора
-  BinFile &operator=(const BinFile &) {}; // избавляемся от warning C4512: assignment operator could not be generated
+  BinFile &operator=(const BinFile &) { return *this; }; // избавляемся от warning C4512: assignment operator could not be generated
 
 public:
   const int &length; // количество файловых байт в контенте
@@ -112,7 +112,7 @@ public:
   {
     file = filename;
     len = get_file_length(file);
-    if (len <= 0) { len = 0; return; }
+    if (len < 0) return;
 
     // оставляем в конце буфера 2 нулевых байта - для нужд текстовых файлов!
     buf.renew(len+2, false); // не стираем память
@@ -122,6 +122,8 @@ public:
     // перекодируем прочитанные данные если надо
     if ( secure ) turn_secure_state(key, width, key_from_numbytes);
   }
+
+  bool okLoad() const { return len >= 0; }
 
   // перекодировка прочитанных из файла данных
   bool turn_secure_state(int key = 0, int width = 32, bool key_from_numbytes = false)
@@ -140,23 +142,33 @@ class TextFile
 {
   wstring file; // широкая строка-копия текста из файла
   bool uni; // true для Unicode, false для ANSI файла
-  size_t len; // длина строки
+  int len; // длина строки
   static const wchar_t UNI_HDR = 0xFEFF; // маркер Unicode текста в начале файла
-  TextFile &operator=(const TextFile &) {}; // избавляемся от warning C4512: assignment operator could not be generated
+  TextFile &operator=(const TextFile &) { return *this; }; // избавляемся от warning C4512: assignment operator could not be generated
 
 public:
   const size_t &length; // количество литер в контенте
   const bool &is_unicode; // true для Unicode, false для ANSI файла
   const wstring &content; // широкая строка-копия текста из файла
+
   // описание параметров перекодировки см. TurnSecureCode()
+  TextFile() : length(len), is_unicode(uni), content(file) {}
+
   TextFile(wstring2 filename, bool secure = false, int key = 0, int width = 32, bool key_from_numbytes = false)
-          : is_unicode(uni), content(file), length(len)
+          : length(len), is_unicode(uni), content(file)
+  {
+    Load(filename, secure, key, width, key_from_numbytes);
+  }
+
+  bool okLoad() const { return len >= 0; }
+
+  bool Load(wstring2 filename, bool secure = false, int key = 0, int width = 32, bool key_from_numbytes = false)
   {
     file.clear();
     uni = false;
     BinFile df(filename, secure, key, width, key_from_numbytes);
     len = df.length;
-    if (len <= 0) { len = 0; return; }
+    if (len < 0) return false;
 
     // проверяем тип текста - у юникодового должен быть хедер и четная длина
     if (len%2 == 0 && len > 2)
@@ -176,6 +188,7 @@ public:
     }
 
     len = file.size();
+    return true;
   }
 };
 

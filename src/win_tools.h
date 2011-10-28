@@ -22,6 +22,9 @@ template<class I1, class I2, class I3> void Mbox(const I1 i1, const I2 i2, const
 { wstring2 str; str << i1 << delim << i2 << delim << i3; MsgBox(str); }
 template<class I1,class I2,class I3,class I4> void Mbox(const I1 i1,const I2 i2,const I3 i3,const I4 i4,const wchar_t delim = UNI_LF)
 { wstring2 str; str << i1 << delim << i2 << delim << i3 << delim << i4; MsgBox(str); }
+template<class I1,class I2,class I3,class I4,class I5>
+  void Mbox(const I1 i1,const I2 i2,const I3 i3,const I4 i4,const I5 i5,const wchar_t delim = UNI_LF)
+{ wstring2 str; str << i1 << delim << i2 << delim << i3 << delim << i4 << delim << i5; MsgBox(str); }
 // то же самое с немодальным боксом - с нулевым хендлом
 void Mbox0();
 void MsgBox0(wstring text);

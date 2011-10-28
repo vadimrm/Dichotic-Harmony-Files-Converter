@@ -10,6 +10,9 @@
 	<File name="..\libjdksmidi\include\jdksmidi\msg.h" open="0" top="0" tabpos="0">
 		<Cursor position="2645" topLine="63" />
 	</File>
+	<File name="..\libjdksmidi\include\jdksmidi\track.h" open="0" top="0" tabpos="0">
+		<Cursor position="7299" topLine="190" />
+	</File>
 	<File name="..\libjdksmidi\include\jdksmidi\world.h" open="0" top="0" tabpos="0">
 		<Cursor position="2165" topLine="67" />
 	</File>
@@ -20,10 +23,10 @@
 		<Cursor position="4121" topLine="193" />
 	</File>
 	<File name="..\libjdksmidi\include\jdksmidi_track.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="2868" topLine="117" />
+		<Cursor position="3034" topLine="120" />
 	</File>
 	<File name="amain.cpp" open="1" top="1" tabpos="0">
-		<Cursor position="0" topLine="0" />
+		<Cursor position="8" topLine="0" />
 	</File>
 	<File name="amain.h" open="0" top="0" tabpos="2">
 		<Cursor position="0" topLine="0" />
@@ -41,7 +44,7 @@
 		<Cursor position="3810" topLine="138" />
 	</File>
 	<File name="files.h" open="0" top="0" tabpos="0">
-		<Cursor position="5805" topLine="87" />
+		<Cursor position="8702" topLine="124" />
 	</File>
 	<File name="random.h" open="0" top="0" tabpos="2">
 		<Cursor position="975" topLine="13" />

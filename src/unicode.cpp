@@ -1,5 +1,6 @@
 ﻿
 #include "stdafx.h"
+#include "stdafx2.h"
 
 const wchar_t *UNI_CRLF = L"\r\n"; // в конце каждой строки - пара символов UNI_CR,UNI_LF
 const wchar_t *UNI_NULL_STR = L""; // широкая пустая строка
@@ -77,7 +78,9 @@ www.RSDN.ru
 
 // ====================================================================
 
-#define _ADDFAC(loc, pfac) locale(loc, pfac) // в @GW нет этого дефайна - берём его из VS хедера <xlocale>
+#ifndef _ADDFAC
+#define _ADDFAC(loc, pfac) locale(loc, pfac) // в GW нет этого дефайна - берём его из VS хедера <xlocale>
+#endif
 
 bool Unicode_open_wifstream(wifstream &ifstr, const char *file)
 // открываем wifstream для "прозрачной" работы с Unicode текстовым файлом для чтения
@@ -88,7 +91,7 @@ bool Unicode_open_wifstream(wifstream &ifstr, const char *file)
   // оказывается mingw не поддерживает ни wchar_t, ни wstring, по крайней мере в fstream классах...
   // для решения этой проблемы обычно советуют брать библиотеку STLport, но я это делать не буду...
   // открываем поток в двоичном режиме
-  ifstr.open(file, ios_base::binary); // @GW не имеет версии для wchar_t file!
+  ifstr.open(file, ios_base::binary);
   return ifstr.is_open();
 }
 
@@ -97,7 +100,7 @@ bool Unicode_open_wofstream(wofstream &ofstr, const char *file)
 {
   locale loc = _ADDFAC(locale::classic(), new NullCodecvt);
   ofstr.imbue(loc);
-  ofstr.open(file, ios_base::binary); // @GW не имеет версии для wchar_t file!
+  ofstr.open(file, ios_base::binary);
   return ofstr.is_open();
 }
 

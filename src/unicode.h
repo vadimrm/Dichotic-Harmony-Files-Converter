@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 
-template<class T> T & un_volatile(volatile T &t) { return static_cast<T>( t ); } // ???
+template<class T> T & un_volatile(volatile T &t) { return static_cast<T>( t ); } // ??
 
 using namespace std;
 
@@ -21,9 +21,10 @@ bool get_textfile_wstring_array(wstring sarray[], int &nums, const char *file);
 // bool Unicode_save_wstring_array(wstring sarray[], int nums, const wchar_t *file); // VS
 // bool Unicode_open_wifstream(wifstream &ifstr, const wchar_t *file); // VS
 // bool Unicode_open_wofstream(wofstream &ofstr, const wchar_t *file); // VS
-bool Unicode_save_wstring_array(wstring sarray[], int nums, const char *file); // @GW
-bool Unicode_open_wifstream(wifstream &ifstr, const char *file); // @GW
-bool Unicode_open_wofstream(wofstream &ofstr, const char *file); // @GW
+// @GW не имеет версии для (wchar_t *file), есть только для узких литер!
+bool Unicode_save_wstring_array(wstring sarray[], int nums, const char *file); // GW
+bool Unicode_open_wifstream(wifstream &ifstr, const char *file); // GW
+bool Unicode_open_wofstream(wofstream &ofstr, const char *file); // GW
 
 string wchar2char(const wchar_t *wstr); // это синоним toNarrowString(wstr)
        string toNarrowString(const wchar_t *pStr, int len=-1);
@@ -76,8 +77,8 @@ public:
   wstring2(const wstring  &wstr) { *this = wstr; }
 
 //  wstring2(const wstring2 &wstr2) { *this = wstr2; } // VC
-  // warning: base class should be explicitly initialized in the copy constructor
-  wstring2(const wstring2 &wstr2) : wstring(wstr2) { *this = wstr2; } // @GW
+  // GW warning: base class should be explicitly initialized in the copy constructor
+  wstring2(const wstring2 &wstr2) : wstring(wstr2) { *this = wstr2; } // GW
 
   wstring2(const char *str) { *this = str; }
   wstring2(      char *str) { *this = str; } // ?
@@ -214,14 +215,17 @@ public:
     return *this;
   }
 
+  // в Visual Studio 2005 есть ошибка, которая говорит о несуществующем конфликте нижеследующего
+  // шаблона с std::vector<> поэтому убираем код моего шаблона для данного компилятора
+#ifndef _MSC_VER
   // оператор (wstring2) + (любой тип);  friend - не член класса - не меняет *this!
-
   template<class T> friend wstring2 operator+ (const wstring2 &wstr, const T &t)
   {
     wstring2 ws = wstr;
     ws += t;
     return ws;
   }
+#endif
 };
 
 /*
@@ -252,7 +256,7 @@ public:
 */
 
 #ifndef _THROW0
-#define _THROW0() throw() // в @GW нет этого дефайна - берём его из VS хедера <xstddef>
+#define _THROW0() throw() // в GW нет этого дефайна - берём его из VS хедера <xstddef>
 #endif
 
 typedef codecvt<wchar_t, char, mbstate_t> NullCodecvtBase;

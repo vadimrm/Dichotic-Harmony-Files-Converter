@@ -103,6 +103,9 @@ public:
 
   void OptimizeTransposition(); // делаем транспозицию = минимальный номер ноты, а последний = 0
 
+  // отбрасываем все ноты кроме самой высокой - только в первом аккорде (постфактум-устранение бага)
+  void SoloMelodyConverter();
+
   int get_accords_number() const { return accords_number; }
   const Ar <DichoticAccord>& arr_accords() const { return accords; }
   const wstring& header_body() const { return header; }
@@ -147,7 +150,65 @@ public:
     return true;
   }
 
-  bool CompressStartPause(bool ignore_percussion)
+  // оставляем только нужный трек track_number, остальные удаляем
+  bool SeparateTrack(int track_number)
+  {
+    MIDIMultiTrack *tracks2 = new MIDIMultiTrack(1);
+    if (!tracks || !tracks2)
+    {
+      delete tracks2;
+      return false;
+    }
+
+    int src_track_numbers = tracks->GetNumTracks();
+    if ( track_number < 0 || track_number > src_track_numbers )
+    {
+      Mbox(L"Error: track_number", track_number, L"out of range 0 ...", src_track_numbers, UNI_SPACE);
+      return false;
+    }
+
+    // это очень важно!! иначе прога виснет из-за неверного MIDIMultiTrack::clks_per_beat
+    tracks2->SetClksPerBeat( tracks->GetClksPerBeat() );
+
+    // порождаем новый трек как копию нужного исходного и помещаем в выходной мультитрек
+    MIDITrack *tr = new MIDITrack( *tracks->GetTrack(track_number) );
+    tracks2->SetTrack(0, tr);
+
+    delete tracks;
+    tracks = tracks2;
+    return true;
+  }
+
+  bool ClearChannel(int channel) // удаляем все сообщения в канале channel
+  {
+    MIDIMultiTrack *tracks2 = new MIDIMultiTrack(1);
+    if (!tracks || !tracks2)
+    {
+      delete tracks2;
+      return false;
+    }
+    jdksmidi::CopyWithoutChannel( *tracks, *tracks2, channel );
+    delete tracks;
+    tracks = tracks2;
+    return true;
+  }
+
+  bool SoloMelodyConverter(bool ignore_percussion = true) // отбрасываем все ноты кроме самой высокой
+  {
+    MIDIMultiTrack *tracks2 = new MIDIMultiTrack(1);
+    if (!tracks || !tracks2)
+    {
+      delete tracks2;
+      return false;
+    }
+    int ignore_channel = ignore_percussion? CHANPERC:-1;
+    jdksmidi::SoloMelodyConverter( *tracks, *tracks2, ignore_channel );
+    delete tracks;
+    tracks = tracks2;
+    return true;
+  }
+
+  bool CompressStartPause(bool ignore_percussion = false)
   {
     MIDIMultiTrack *tracks2 = new MIDIMultiTrack(1);
     if (!tracks || !tracks2)

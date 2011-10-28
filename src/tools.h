@@ -17,12 +17,15 @@ typedef          __int64 int64;
 typedef unsigned int     uint; // конфликтует с libjdksmidi
 typedef   signed int     sint;
 
-// #define NULL 0 // @GW справедливо не разрешает переопределять NULL
+#ifndef NULL
+#define NULL 0 // GW справедливо не разрешает переопределять NULL
+#endif
 
 const double two16 = 65536.; // 2^16
 const double two32 = two16*two16; // 2^32 = 4294967296
 
 const int MAX_INT  = 0x7FFFFFFF; // 2^31-1 = 2147483647
+const int MIN_INT  = 0x80000000; //         -2147483648
 const int MAX_UINT = 0xFFFFFFFF; // 2^32-1 = 4294967295
 
 const float MAX_FLOAT = FLT_MAX ; // 3.402823466e+38F
@@ -30,6 +33,19 @@ const float MIN_FLOAT = FLT_MIN ; // 1.175494351e-38F
 
 const double MAX_DOUBLE = DBL_MAX ; // 1.7976931348623158e+308
 const double MIN_DOUBLE = DBL_MIN ; // 2.2250738585072014e-308
+
+inline int quantity_of_set_bits(int number) // определяем число единичных бит в num
+{
+  int q = 0;
+  for (int n = 0; n < 32; ++ n)
+  {
+    if (number & 1) ++q;
+    number >>= 1;
+  }
+  return q;
+}
+
+inline int get_bit_of_number(int number, int bitnum) { return (number >> bitnum) & 1; }
 
 // return x, bat (not <a) and (not >b) !
 template<class I,class D>inline D minxmax(I a, D x, I b) { return (D)(x<(D)a? a:(x>(D)b? b:x)); }
@@ -141,8 +157,8 @@ template <class I> inline I ring(I mi, I x, I ma) { return mi + modulo(x-mi, ma-
 template <class D> inline int float2int(D d) { return int( d >= D(0.0) ? (d+D(0.5)):(d-D(0.5))); }
 
 // template <class D> inline unsigned int float2uint(D d) { return  unsigned int(d>=0.0? (d+0.5):(d-0.5)); } // VS
-// @GW error: expected primary-expression before 'unsigned'; заменяем на uint32 - то же самое!
-template <class D> inline uint32 float2uint(D d) { return uint32(d>=0.0? (d+0.5):(d-0.5)); } // @GW
+// GW error: expected primary-expression before 'unsigned'; заменяем на uint32 - то же самое, но теперь работает
+template <class D> inline uint32 float2uint(D d) { return uint32(d>=0.0? (d+0.5):(d-0.5)); } // GW
 
 // умножение любого на float
 template <class X, class D> inline void xmulf(X &x, D d) { x = X(x*d); }
@@ -212,16 +228,22 @@ template <class T> string object_as_text_string(const T &obj)
 // копирует 4 байта src->dst с изменением порядка байтов на обратный: src[0]->dst[3]...
 uint32 reverse_copy_dword(void *dst, uint32 src); // возвращает dst в виде dword
 
-// число сочетаний из n по k: C = n!/k!*(n-k)! = (k+1)*(k+2)*...*n/1*2*...*(n-k)
-uint64 C_n_k(int n, int k); // эта функция "загибается" уже при n = 21, k = 2
-uint64 fC_n_k(int n, int k); // вариант внутри с плав. запятой, даёт гораздо больший рабочий диапазон!
+// определители числа сочетаний (combination) из n по k: C = n!/k!*(n-k)! = (k+1)*(k+2)*...*n/1*2*...*(n-k)
+uint64 C_n_k(int n, int k); // эта функция работает верно при n <= 62 (и любых k)
+// вариант с плав. запятой (внутри), даёт гораздо больший рабочий диапазон, кажется не менее n=100
+uint64 fC_n_k(int n, int k);
+
+// выдаёт массив сочетаний из N по K, в виде N-разрядных чисел с K единичными битами
+// возвращает количество найденных сочетаний; абсолютные ограничения: 1 <= K <= N <= 30
+// при N = 22,23,24,25 подсчёт длится 1,2,4,8 секунд... - на 3 Ггц Pentium 4
+int arC_n_k(int N, int K, vector<int> &Cnk); // генератор сочетаний из N по K
 
 void pip();
 void SetBit(int &mask, int bitnum, int bitval);
 bool TurnSecureCode(void *buffer, int numbytes, int key, int width, bool key_from_numbytes = false);
 
-extern inline void mem32cpy32(void *dst, void *src, int numdwords);
-extern inline void mem32set32(void *dst, int setval, int numdwords);
+// extern inline void mem32cpy32(void *dst, void *src, int numdwords); // старая asm функция
+// extern inline void mem32set32(void *dst, int setval, int numdwords); // старая asm функция
 
 extern inline uint32 Randu(uint32 &seed);
 extern inline int Randu31(uint32 &seed);
